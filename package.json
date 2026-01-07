@@ -1,0 +1,22 @@
+{
+  "name": "ecommerce_exp",
+  "version": "1.0.0",
+  "description": "Experimental ecommerce app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omercngiz/ecommerce_exp.git"
+  },
+  "author": "Ömer Cengiz <omer.cengiz-34@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/omercngiz/ecommerce_exp/issues"
+  },
+  "homepage": "https://github.com/omercngiz/ecommerce_exp#readme",
+  "dependencies": {
+    "ansi-red": "^0.1.1"
+  }
+}

@@ -33,10 +33,4 @@ headphones.addCategory(electronics);
 omer.addToBasket(laptop, 1);
 ali.addToBasket(smartphone, 2);
 
-console.log(omer.basket);
-console.log(ali.basket);
-
-
-console.log(users);
-console.log(products);
-console.log(categories);
+products.map(console.log);

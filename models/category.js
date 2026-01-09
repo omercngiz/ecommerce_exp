@@ -1,4 +1,4 @@
-import { generateId } from "./utils.js";
+import { generateId } from "../utils.js";
 
 export default class Category {
   constructor(name, description) {

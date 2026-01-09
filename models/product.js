@@ -1,4 +1,4 @@
-import { generateId } from "./utils.js";
+import { generateId } from "../utils.js";
 
 export default class Product {
   constructor(name, description, price, stock) {

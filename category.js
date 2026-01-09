@@ -8,6 +8,10 @@ export default class Category {
     this.products = [];
   }
 
+  create(data) {
+    return new Category(data.name, data.description, data.products);
+  }
+
   addProduct(product) {
     this.products.push(product);
     product.categories.push(this);

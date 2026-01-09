@@ -11,6 +11,10 @@ export default class User {
     this.basket = [];
   }
 
+  create(data) {
+    return new User(data.name, data.surname, data.username, data.email, data.passwordHash, data.basket);
+  }
+
   addToBasket(product, quantity) {
     this.basket.push({ product, quantity });
   }

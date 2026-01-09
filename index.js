@@ -1,7 +1,15 @@
+import express from "express";
+
 import User from "./user.js";
 import Category from "./category.js";
 import Product from "./product.js";
 import Database from "./database.js";
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the E-commerce API");
+});
 
 const db = new Database();
 
@@ -33,4 +41,10 @@ headphones.addCategory(electronics);
 omer.addToBasket(laptop, 1);
 ali.addToBasket(smartphone, 2);
 
-products.map(console.log);
+app.get("/users", (req, res) => {
+  res.send(db.loadUser());
+});
+
+app.listen(3000, () => {
+  console.log("E-commerce API is running on http://localhost:3000");
+});

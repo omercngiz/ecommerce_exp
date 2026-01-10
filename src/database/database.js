@@ -2,19 +2,6 @@ import fs from "fs";
 import { generateId } from "./utils.js";
 
 export default class Database {
-    async read(file) {
-        try {
-            if (fs.existsSync(file)) {
-                const data = await fs.promises.readFile(file, 'utf-8');
-                return JSON.parse(data);
-            }
-            return [];
-        } catch (error) {
-            console.error('Error reading file:', error);
-            return [];
-        }
-    }
-
     async write(file, data) {
         try {
             // Gelen veriyi array'e çevir (eğer değilse)
@@ -70,6 +57,23 @@ export default class Database {
         } catch (error) {
             return { status: 500, message: 'Error writing data', error: error.message };
         }
+    }
+
+    async read(file) {
+        try {
+            if (fs.existsSync(file)) {
+                const data = await fs.promises.readFile(file, 'utf-8');
+                return JSON.parse(data);
+            }
+            return [];
+        } catch (error) {
+            console.error('Error reading file:', error);
+            return [];
+        }
+    }
+
+    update(file, id, model, field, value) {
+        // TODO: implement update method
     }
 
     async remove(file, id) {

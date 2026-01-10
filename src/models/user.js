@@ -1,5 +1,3 @@
-import { generateId } from "../database/utils.js";
-
 export default class User {
   constructor(name, surname, username, email, passwordHash) {
     this.id;
@@ -13,9 +11,5 @@ export default class User {
 
   create(data) {
     return new User(data.name, data.surname, data.username, data.email, data.passwordHash, data.basket);
-  }
-
-  addToBasket(product, quantity) {
-    this.basket.push({ product, quantity });
   }
 }

@@ -1,4 +1,4 @@
-import { generateId } from "../utils.js";
+import { generateId } from "../database/utils.js";
 
 export default class User {
   constructor(name, surname, username, email, passwordHash) {

@@ -2,7 +2,7 @@ import { generateId } from "../utils.js";
 
 export default class User {
   constructor(name, surname, username, email, passwordHash) {
-    this.id = generateId();
+    this.id;
     this.name = name;
     this.surname = surname;
     this.username = username;

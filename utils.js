@@ -1,12 +1,3 @@
-const usedIds = [];
-
 export function generateId() {
-  let newId;
-  
-  do {
-    newId = '_' + Math.random().toString(36).slice(2, 11);
-  } while (usedIds.includes(newId));
-  
-  usedIds.push(newId);
-  return newId;
+    return Math.floor(Math.random()* 9000000000) + 1000000000;
 }

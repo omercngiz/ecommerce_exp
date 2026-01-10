@@ -2,7 +2,7 @@ import { generateId } from "../utils.js";
 
 export default class Category {
   constructor(name, description) {
-    this.id = generateId();
+    this.id;
     this.name = name;
     this.description = description;
     this.products = [];

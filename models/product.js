@@ -2,7 +2,7 @@ import { generateId } from "../utils.js";
 
 export default class Product {
   constructor(name, description, price, stock) {
-    this.id = generateId();
+    this.id;
     this.name = name;
     this.description = description;
     this.price = price;

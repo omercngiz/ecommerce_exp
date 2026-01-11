@@ -179,6 +179,29 @@ html(lang="tr")
         color: #f0ead6;
       }
       
+      /* Dev Banner */
+      .dev-banner {
+        background: #4a9eff;
+        color: white;
+        text-align: center;
+        padding: 0.5rem 0;
+        font-size: 0.9rem;
+      }
+      
+      .dev-banner a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.3rem 1rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+        display: inline-block;
+      }
+      
+      .dev-banner a:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      
       @media (max-width: 768px) {
         .header-content {
           flex-direction: column;
@@ -199,6 +222,8 @@ html(lang="tr")
         }
       }
   body
+    .dev-banner
+      a(href="/index") 🔧 Geliştiricilere Özel Detaylar
     include header
     main
       .container

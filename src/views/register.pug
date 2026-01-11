@@ -1,0 +1,445 @@
+extends layout
+
+block content
+  style.
+    .register-container {
+      max-width: 500px;
+      margin: 4rem auto;
+    }
+    
+    .register-card {
+      background: white;
+      padding: 3rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(30, 77, 43, 0.1);
+      border-top: 4px solid #1e4d2b;
+    }
+    
+    .register-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .register-header h1 {
+      color: #1e4d2b;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .register-header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      color: #1e4d2b;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 2px solid #d4c5a9;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .form-group input.error {
+      border-color: #c33;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .password-strength {
+      margin-top: 0.5rem;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s;
+      border-radius: 2px;
+    }
+    
+    .password-strength-bar.weak {
+      width: 33%;
+      background: #f44336;
+    }
+    
+    .password-strength-bar.medium {
+      width: 66%;
+      background: #ff9800;
+    }
+    
+    .password-strength-bar.strong {
+      width: 100%;
+      background: #4caf50;
+    }
+    
+    .password-hint {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 0.3rem;
+    }
+    
+    .terms-agreement {
+      margin-bottom: 1.5rem;
+    }
+    
+    .terms-checkbox {
+      display: flex;
+      align-items: start;
+      gap: 0.8rem;
+    }
+    
+    .terms-checkbox input[type="checkbox"] {
+      width: auto;
+      margin-top: 0.2rem;
+      cursor: pointer;
+    }
+    
+    .terms-checkbox label {
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: normal;
+      cursor: pointer;
+    }
+    
+    .terms-checkbox a {
+      color: #1e4d2b;
+      text-decoration: none;
+    }
+    
+    .terms-checkbox a:hover {
+      text-decoration: underline;
+    }
+    
+    .register-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #1e4d2b;
+      color: #f0ead6;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .register-btn:hover {
+      background: #2d6b3d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(30, 77, 43, 0.3);
+    }
+    
+    .register-btn:active {
+      transform: translateY(0);
+    }
+    
+    .register-btn:disabled {
+      background: #999;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .divider {
+      text-align: center;
+      margin: 2rem 0;
+      position: relative;
+    }
+    
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e0e0e0;
+    }
+    
+    .divider span {
+      background: white;
+      padding: 0 1rem;
+      position: relative;
+      color: #999;
+      font-size: 0.9rem;
+    }
+    
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .login-link a {
+      color: #1e4d2b;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    
+    .login-link a:hover {
+      color: #2d6b3d;
+      text-decoration: underline;
+    }
+    
+    .social-register {
+      margin-top: 1.5rem;
+    }
+    
+    .social-btn {
+      width: 100%;
+      padding: 0.9rem;
+      margin-bottom: 0.8rem;
+      border: 2px solid #d4c5a9;
+      background: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+    
+    .social-btn:hover {
+      background: #fdfbf7;
+      border-color: #1e4d2b;
+      transform: translateY(-2px);
+    }
+    
+    .social-btn-icon {
+      font-size: 1.3rem;
+    }
+    
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+    
+    .success-message {
+      background: #efe;
+      color: #2a7;
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+    }
+
+  .register-container
+    .register-card
+      .register-header
+        h1 📝 Kayıt Ol
+        p MESK'e hoş geldiniz! Yeni hesap oluşturun
+      
+      .error-message#errorMessage
+        | Lütfen tüm alanları doğru doldurun!
+      
+      .success-message#successMessage
+        | Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...
+      
+      form#registerForm
+        .form-row
+          .form-group
+            label(for="firstname") Ad
+            input#firstname(type="text" name="firstname" placeholder="Ahmet" required)
+          
+          .form-group
+            label(for="lastname") Soyad
+            input#lastname(type="text" name="lastname" placeholder="Yılmaz" required)
+        
+        .form-group
+          label(for="email") E-posta Adresi
+          input#email(type="email" name="email" placeholder="ornek@email.com" required)
+        
+        .form-group
+          label(for="username") Kullanıcı Adı
+          input#username(type="text" name="username" placeholder="kullaniciadi" required)
+          .password-hint En az 4 karakter
+        
+        .form-group
+          label(for="password") Şifre
+          input#password(type="password" name="password" placeholder="••••••••" required)
+          .password-strength
+            .password-strength-bar#passwordStrength
+          .password-hint En az 6 karakter, bir büyük harf ve bir rakam içermeli
+        
+        .form-group
+          label(for="confirmPassword") Şifre Tekrarı
+          input#confirmPassword(type="password" name="confirmPassword" placeholder="••••••••" required)
+        
+        .terms-agreement
+          .terms-checkbox
+            input#terms(type="checkbox" name="terms" required)
+            label(for="terms")
+              | 
+              a(href="#" onclick="alert('Kullanım şartları sayfası yakında!'); return false;") Kullanım Şartları
+              | 'nı ve 
+              a(href="#" onclick="alert('Gizlilik politikası sayfası yakında!'); return false;") Gizlilik Politikası
+              | 'nı okudum ve kabul ediyorum.
+        
+        button.register-btn(type="submit") Kayıt Ol
+      
+      .divider
+        span veya
+      
+      .social-register
+        button.social-btn(type="button" onclick="alert('Google ile kayıt özelliği yakında!')")
+          span.social-btn-icon 🔍
+          span Google ile Kayıt Ol
+        
+        button.social-btn(type="button" onclick="alert('Facebook ile kayıt özelliği yakında!')")
+          span.social-btn-icon 📘
+          span Facebook ile Kayıt Ol
+      
+      .login-link
+        | Zaten hesabınız var mı? 
+        a(href="/login") Giriş Yapın
+  
+  script.
+    const form = document.getElementById('registerForm');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const passwordStrength = document.getElementById('passwordStrength');
+    
+    // Şifre gücü kontrolü
+    password.addEventListener('input', function() {
+      const value = this.value;
+      const strength = calculatePasswordStrength(value);
+      
+      passwordStrength.className = 'password-strength-bar';
+      if (strength > 0) {
+        if (strength < 3) {
+          passwordStrength.classList.add('weak');
+        } else if (strength < 5) {
+          passwordStrength.classList.add('medium');
+        } else {
+          passwordStrength.classList.add('strong');
+        }
+      }
+    });
+    
+    function calculatePasswordStrength(password) {
+      let strength = 0;
+      if (password.length >= 6) strength++;
+      if (password.length >= 10) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^a-zA-Z0-9]/.test(password)) strength++;
+      return strength;
+    }
+    
+    // Form gönderimi
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const firstname = document.getElementById('firstname').value.trim();
+      const lastname = document.getElementById('lastname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const passwordValue = password.value;
+      const confirmPasswordValue = confirmPassword.value;
+      const terms = document.getElementById('terms').checked;
+      
+      // Validasyonlar
+      if (!firstname || !lastname || !email || !username || !passwordValue || !confirmPasswordValue) {
+        showError('Lütfen tüm alanları doldurun!');
+        return;
+      }
+      
+      if (username.length < 4) {
+        showError('Kullanıcı adı en az 4 karakter olmalıdır!');
+        return;
+      }
+      
+      if (passwordValue.length < 6) {
+        showError('Şifre en az 6 karakter olmalıdır!');
+        return;
+      }
+      
+      if (!/[A-Z]/.test(passwordValue) || !/[0-9]/.test(passwordValue)) {
+        showError('Şifre en az bir büyük harf ve bir rakam içermelidir!');
+        return;
+      }
+      
+      if (passwordValue !== confirmPasswordValue) {
+        showError('Şifreler eşleşmiyor!');
+        confirmPassword.classList.add('error');
+        return;
+      }
+      
+      if (!terms) {
+        showError('Kullanım şartlarını kabul etmelisiniz!');
+        return;
+      }
+      
+      // Başarılı kayıt
+      errorMessage.classList.remove('show');
+      successMessage.classList.add('show');
+      
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
+    });
+    
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+      
+      setTimeout(() => {
+        errorMessage.classList.remove('show');
+      }, 4000);
+    }
+    
+    // Şifre eşleşme kontrolü
+    confirmPassword.addEventListener('input', function() {
+      if (this.value && this.value !== password.value) {
+        this.classList.add('error');
+      } else {
+        this.classList.remove('error');
+      }
+    });

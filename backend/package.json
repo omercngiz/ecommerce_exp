@@ -1,7 +1,7 @@
 {
-  "name": "ecommerce_exp",
+  "name": "ecommerce_exp_backend",
   "version": "1.0.0",
-  "description": "Experimental ecommerce app",
+  "description": "Backend server of my experimental ecommerce app",
   "main": "index.js",
   "type": "module",
   "scripts": {

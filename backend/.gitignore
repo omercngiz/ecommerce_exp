@@ -1,5 +1,7 @@
-.vscode/
 node_modules/
-data/
 coverage/
-yapılacaklar.txt
+.env
+.DS_Store
+dist/
+build/
+*.log

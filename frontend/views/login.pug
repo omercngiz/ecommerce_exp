@@ -1,0 +1,265 @@
+extends layout
+
+block content
+  style.
+    .login-container {
+      max-width: 450px;
+      margin: 4rem auto;
+    }
+    
+    .login-card {
+      background: white;
+      padding: 3rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(30, 77, 43, 0.1);
+      border-top: 4px solid #1e4d2b;
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .login-header h1 {
+      color: #1e4d2b;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .login-header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      color: #1e4d2b;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 2px solid #d4c5a9;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #1e4d2b;
+      box-shadow: 0 0 0 3px rgba(30, 77, 43, 0.1);
+    }
+    
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #666;
+    }
+    
+    .remember-me input[type="checkbox"] {
+      width: auto;
+      cursor: pointer;
+    }
+    
+    .forgot-password {
+      color: #1e4d2b;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .forgot-password:hover {
+      color: #2d6b3d;
+      text-decoration: underline;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 1rem;
+      background: #1e4d2b;
+      color: #f0ead6;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .login-btn:hover {
+      background: #2d6b3d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(30, 77, 43, 0.3);
+    }
+    
+    .login-btn:active {
+      transform: translateY(0);
+    }
+    
+    .divider {
+      text-align: center;
+      margin: 2rem 0;
+      position: relative;
+    }
+    
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #e0e0e0;
+    }
+    
+    .divider span {
+      background: white;
+      padding: 0 1rem;
+      position: relative;
+      color: #999;
+      font-size: 0.9rem;
+    }
+    
+    .register-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .register-link a {
+      color: #1e4d2b;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    
+    .register-link a:hover {
+      color: #2d6b3d;
+      text-decoration: underline;
+    }
+    
+    .social-login {
+      margin-top: 1.5rem;
+    }
+    
+    .social-btn {
+      width: 100%;
+      padding: 0.9rem;
+      margin-bottom: 0.8rem;
+      border: 2px solid #d4c5a9;
+      background: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+    
+    .social-btn:hover {
+      background: #fdfbf7;
+      border-color: #1e4d2b;
+      transform: translateY(-2px);
+    }
+    
+    .social-btn-icon {
+      font-size: 1.3rem;
+    }
+    
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+
+  .login-container
+    .login-card
+      .login-header
+        h1 🔐 Giriş Yap
+        p MESK hesabınıza giriş yapın
+      
+      .error-message#errorMessage
+        | Kullanıcı adı veya şifre hatalı!
+      
+      form#loginForm
+        .form-group
+          label(for="username") Kullanıcı Adı veya E-posta
+          input#username(type="text" name="username" placeholder="kullanici@email.com" required)
+        
+        .form-group
+          label(for="password") Şifre
+          input#password(type="password" name="password" placeholder="••••••••" required)
+        
+        .remember-forgot
+          label.remember-me
+            input(type="checkbox" name="remember")
+            span Beni Hatırla
+          a.forgot-password(href="#") Şifremi Unuttum
+        
+        button.login-btn(type="submit") Giriş Yap
+      
+      .divider
+        span veya
+      
+      .social-login
+        button.social-btn(type="button" onclick="alert('Google ile giriş özelliği yakında!')")
+          span.social-btn-icon 🔍
+          span Google ile Giriş Yap
+        
+        button.social-btn(type="button" onclick="alert('Facebook ile giriş özelliği yakında!')")
+          span.social-btn-icon 📘
+          span Facebook ile Giriş Yap
+      
+      .register-link
+        | Hesabınız yok mu? 
+        a(href="/register") Kayıt Olun
+  
+  script.
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+      
+      // Demo amaçlı basit validasyon
+      if (username === 'demo' && password === '123456') {
+        alert('Giriş başarılı! Ana sayfaya yönlendiriliyorsunuz...');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 1000);
+      } else {
+        errorMessage.classList.add('show');
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+        }, 3000);
+      }
+    });

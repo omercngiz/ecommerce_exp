@@ -1,0 +1,303 @@
+extends layout
+
+block content
+  style.
+    .hero {
+      text-align: center;
+      padding: 3rem 0;
+      background: linear-gradient(135deg, #2d6b3d 0%, #1e4d2b 100%);
+      color: #f0ead6;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+    
+    .hero p {
+      font-size: 1.1rem;
+      color: #d4c5a9;
+    }
+    
+    .search-section {
+      margin-bottom: 3rem;
+    }
+    
+    .search-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 0.8rem 1.2rem;
+      border: 2px solid #2d6b3d;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: #1e4d2b;
+    }
+    
+    .btn {
+      padding: 0.8rem 2rem;
+      background: #1e4d2b;
+      color: #f0ead6;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    
+    .btn:hover {
+      background: #2d6b3d;
+    }
+    
+    .categories {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .category-btn {
+      padding: 0.6rem 1.5rem;
+      background: #f0ead6;
+      color: #1e4d2b;
+      border: 2px solid #d4c5a9;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+    }
+    
+    .category-btn:hover,
+    .category-btn.active {
+      background: #1e4d2b;
+      color: #f0ead6;
+      border-color: #1e4d2b;
+    }
+    
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .product-card {
+      background: white;
+      border: 2px solid #d4c5a9;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(30, 77, 43, 0.15);
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 250px;
+      background: linear-gradient(135deg, #e8dcc4 0%, #d4c5a9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: #1e4d2b;
+    }
+    
+    .product-info {
+      padding: 1.5rem;
+    }
+    
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #1e4d2b;
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-desc {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+    
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .product-price {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #2d6b3d;
+    }
+    
+    .product-stock {
+      font-size: 0.85rem;
+      color: #666;
+    }
+    
+    .no-products {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+      font-size: 1.1rem;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      font-size: 1.2rem;
+      color: #1e4d2b;
+    }
+
+  .hero
+    h1 🖌️ Arapça Hat Sanatı
+    p Geçmişin estetiğini günümüze taşıyan, zarif el işi tablolar
+  
+  .search-section
+    .search-bar
+      input.search-input#searchInput(type="text" placeholder="Tablo ara...")
+      button.btn#searchBtn Ara
+    
+    .categories#categoriesContainer
+      button.category-btn.active(data-category="all") Tümü
+      // Kategoriler dinamik yüklenecek
+  
+  .products-section
+    .loading#loadingMsg Yükleniyor...
+    .products-grid#productsGrid
+      // Ürünler dinamik yüklenecek
+    .no-products#noProducts(style="display: none;") Ürün bulunamadı
+  
+  script(src="https://unpkg.com/axios/dist/axios.min.js")
+  script.
+    let allProducts = [];
+    let allCategories = [];
+    let currentCategory = 'all';
+    let searchQuery = '';
+    
+    // Sayfa yüklendiğinde ürünleri ve kategorileri çek
+    async function loadData() {
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          axios.get('/product/all'),
+          axios.get('/category/all')
+        ]);
+        
+        allProducts = productsRes.data.products || [];
+        allCategories = categoriesRes.data.categories || [];
+        
+        renderCategories();
+        renderProducts();
+        
+        document.getElementById('loadingMsg').style.display = 'none';
+      } catch (error) {
+        console.error('Veri yüklenirken hata:', error);
+        document.getElementById('loadingMsg').textContent = 'Veri yüklenirken hata oluştu';
+      }
+    }
+    
+    // Kategorileri render et
+    function renderCategories() {
+      const container = document.getElementById('categoriesContainer');
+      container.innerHTML = '<button class="category-btn active" data-category="all">Tümü</button>';
+      
+      allCategories.forEach(category => {
+        const btn = document.createElement('button');
+        btn.className = 'category-btn';
+        btn.textContent = category.name;
+        btn.dataset.category = category.id;
+        btn.addEventListener('click', () => filterByCategory(category.id));
+        container.appendChild(btn);
+      });
+    }
+    
+    // Ürünleri render et
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      const noProducts = document.getElementById('noProducts');
+      
+      let filtered = allProducts;
+      
+      // Arama filtresi
+      if (searchQuery) {
+        filtered = filtered.filter(p => 
+          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.description.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      
+      if (filtered.length === 0) {
+        grid.style.display = 'none';
+        noProducts.style.display = 'block';
+        return;
+      }
+      
+      grid.style.display = 'grid';
+      noProducts.style.display = 'none';
+      
+      grid.innerHTML = filtered.map(product => `
+        <div class="product-card">
+          <div class="product-image">🖼️</div>
+          <div class="product-info">
+            <div class="product-name">${product.name}</div>
+            <div class="product-desc">${product.description}</div>
+            <div class="product-footer">
+              <div class="product-price">${product.price.toFixed(2)} ₺</div>
+              <div class="product-stock">Stok: ${product.stock}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Kategoriye göre filtrele
+    function filterByCategory(categoryId) {
+      currentCategory = categoryId;
+      
+      // Aktif butonu güncelle
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.category == categoryId) {
+          btn.classList.add('active');
+        }
+      });
+      
+      renderProducts();
+    }
+    
+    // Arama yap
+    function search() {
+      searchQuery = document.getElementById('searchInput').value;
+      renderProducts();
+    }
+    
+    // Event listeners
+    document.getElementById('searchBtn').addEventListener('click', search);
+    document.getElementById('searchInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') search();
+    });
+    
+    // Tüm kategoriler butonuna event listener
+    document.querySelector('[data-category="all"]').addEventListener('click', () => {
+      filterByCategory('all');
+    });
+    
+    // Sayfa yüklendiğinde
+    loadData();

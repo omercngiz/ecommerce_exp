@@ -1,0 +1,117 @@
+extends layout
+
+block content
+  style.
+    .about-hero {
+      text-align: center;
+      padding: 3rem 0;
+      background: linear-gradient(135deg, #2d6b3d 0%, #1e4d2b 100%);
+      color: #f0ead6;
+      border-radius: 8px;
+      margin-bottom: 3rem;
+    }
+    
+    .about-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+    
+    .about-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .about-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 8px;
+      border-left: 4px solid #1e4d2b;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .about-section h2 {
+      color: #1e4d2b;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .about-section p {
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 1rem;
+    }
+    
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .value-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f0ead6;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    
+    .value-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .value-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .value-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #1e4d2b;
+      margin-bottom: 0.5rem;
+    }
+    
+    .value-desc {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+  .about-hero
+    h1 🖌️ Hakkımızda
+    p Geleneksel Sanatın Modern Yorumu
+  
+  .about-content
+    .about-section
+      h2 MESK Kimdir?
+      p MESK, Arapça hat sanatının zarif çizgilerini modern yaşamla buluşturan bir sanattır. 2015 yılında kurulduğumuzdan bu yana, geleneksel hat sanatının güzelliğini evinize taşımak için çalışıyoruz.
+      p Her bir tablomuz, ustalarımız tarafından özenle seçilmiş veya yazılmış, yüzyıllardır süregelen bir geleneğin izlerini taşıyan birer sanat eseridir. Hat sanatının manevi derinliğini modern tasarımla harmanlayarak, hem estetik hem de anlam dolu eserler sunuyoruz.
+    
+    .about-section
+      h2 Misyonumuz
+      p Hat sanatının evrensel güzelliğini ve manevi zenginliğini her eve ulaştırmak, bu kadim sanatı yaşatmak ve gelecek nesillere aktarmak için çalışmaktayız. Kaliteli işçilik, özgün tasarımlar ve müşteri memnuniyeti odaklı hizmet anlayışımızla sektörde fark yaratıyoruz.
+    
+    .about-section
+      h2 Değerlerimiz
+      .values-grid
+        .value-card
+          .value-icon 🎨
+          .value-title Özgünlük
+          .value-desc Her eser benzersiz ve özeldir
+        
+        .value-card
+          .value-icon ✨
+          .value-title Kalite
+          .value-desc En iyi malzemeler, en iyi işçilik
+        
+        .value-card
+          .value-icon 🤝
+          .value-title Güven
+          .value-desc Müşteri memnuniyeti önceliğimiz
+        
+        .value-card
+          .value-icon 📿
+          .value-icon Gelenek
+          .value-desc Asırlık sanat geleneğine bağlılık

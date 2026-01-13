@@ -1,22 +1,22 @@
 # Experimental E-Commerce App
 
-JavaScript deneylerimin ve öğrenme yolculuğumun bir parçası olarak geliştirdiğim deneysel bir proje.
+An experimental project developed as part of my JavaScript experiments and learning journey.
 
-## 🎯 Amaç
+## 🎯 Purpose
 
-Bu proje gerçek bir ürün olmaktan çok, JavaScript ile yapabileceklerimin sınırlarını keşfetmek ve yeni şeyler deneyimlemek için oluşturulmuştur.
+This project is designed more for exploring the limits of what I can do with JavaScript and experimenting with new concepts, rather than being a real product.
 
-## 🚀 Hedefler
+## 🚀 Goals
 
-- **Sıfırdan JSON Database:** Node.js `fs` modülü ile kendi JSON temelli veritabanımı yazmak
-- **Framework-Free Development:** Herhangi bir framework ya da kütüphane kullanmadan backend ve frontend geliştirmek
-- **Pure JavaScript:** Raw JavaScript ile neler yapılabileceğini keşfetmek
+- **JSON Database from Scratch:** Building my own JSON-based database using Node.js `fs` module
+- **Framework-Free Development:** Developing backend and frontend without using any frameworks or libraries
+- **Pure JavaScript:** Discovering what can be achieved with raw JavaScript
 
-## 📦 Monorepo Yapısı
+## 📦 Monorepo Structure
 
-- **backend/** - Express.js ile API ve business logic
-- **database/** - Node.js tabanlı özel JSON database server
-- **frontend/** - Pug template engine ile view layer
+- **backend/** - API and business logic with native Node.js HTTP server
+- **database/** - Custom JSON database server built with Node.js
+- **frontend/** - View layer with Pug template engine
 
 ## 🛠️ Kurulum
 

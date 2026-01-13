@@ -4,7 +4,7 @@ An experimental project developed as part of my JavaScript experiments and learn
 
 ## 🎯 Purpose
 
-This project is designed more for exploring the limits of what I can do with JavaScript and experimenting with new concepts, rather than being a real product.
+This project is designed more for **exploring the limits** of what I can do with JavaScript and **experimenting with new concepts**, rather than being a real product.
 
 ## 🚀 Goals
 

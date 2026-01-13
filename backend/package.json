@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/omercngiz/ecommerce_exp/issues"
   },
-  "homepage": "https://github.com/omercngiz/ecommerce_exp#readme"
+  "homepage": "https://github.com/omercngiz/ecommerce_exp#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
 }

@@ -44,9 +44,7 @@ const server = net.createServer((socket) => {
      */
     socket.on("data", async (chunk) => {
       socket.accBuffer = Buffer.concat([socket.accBuffer, chunk]);
-
-      log('DEBUG', 'Data received', { bytes: chunk.length, chunk });
-
+      
       while (true) {
         if (socket.accBuffer.length < protocol.HEADER_SIZE) {
           break;
@@ -62,7 +60,6 @@ const server = net.createServer((socket) => {
         socket.accBuffer = socket.accBuffer.slice(messageLength);
         
         try {
-          log('DEBUG', 'Full message received', { messageLength, fullMessage });
           const [reqID, op, ns, key, data] = protocol.decode(fullMessage);
           const [value, statusCode] = await db.handle(op, ns, key, data);
           const response = protocol.encode(reqID, value, statusCode);

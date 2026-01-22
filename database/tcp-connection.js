@@ -7,7 +7,7 @@
 import net from "net";
 import Database from "./database.js";
 import JSONProtocol from "./json-protocol.js";
-import { StatusCodes } from "./status-codes.js";
+import { StatusCodes } from "./constants.js";
 
 /**
  * Connected clients counter

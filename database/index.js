@@ -1,10 +1,15 @@
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import server from './tcp-connection.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let PORT;
 
 try {
-  dotenv.config();
+  dotenv.config({ path: path.join(__dirname, '.env') });
   
   PORT = process.env.PORT;
 

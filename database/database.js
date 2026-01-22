@@ -37,11 +37,11 @@ export default class Database {
 
             // Route to appropriate handler
             switch (op) {
-                case Operations.INSERT:
+                case Operations.CREATE:
                     return await this.create(ns, data);
-                case Operations.GET:
+                case Operations.READ:
                     return await this.read(ns, key);
-                case Operations.SET:
+                case Operations.UPDATE:
                     return await this.update(ns, key, data);
                 case Operations.DELETE:
                     return await this.delete(ns, key);

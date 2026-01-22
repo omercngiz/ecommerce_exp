@@ -5,9 +5,9 @@ export const PROTOCOL_VERSION = 1;
 
 // Operation types
 export const Operations = {
-  INSERT: 'CREATE',
-  GET: 'READ',
-  SET: 'UPDATE',
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
   DELETE: 'DELETE'
 };
 

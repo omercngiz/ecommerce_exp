@@ -1,35 +1,57 @@
-export const encode = (data) => {
-  try {
-    const json = JSON.stringify(data);
-    const body = Buffer.from(json, 'utf-8');
-    const header = Buffer.from(`${body.length}\n`, 'utf-8');
-    
-    return Buffer.concat([header, body]);
-  } catch (error) {
-    throw new Error(`Encode error: ${error.message}`);
-  }
-};
+import { StatusMessages } from "./constants.js";
+import { generate32BitId } from "./utils.js";
 
-export const decode = (buffer) => {
-  try {
-    const separator = buffer.indexOf('\n');
-    
-    if (separator === -1) {
-      throw new Error('Invalid protocol: separator not found');
-    }
-    
-    const header = buffer.slice(0, separator).toString('utf-8');
-    const length = parseInt(header, 10);
-    
-    if (isNaN(length)) {
-      throw new Error('Invalid protocol: invalid length');
-    }
-    
-    const body = buffer.slice(separator + 1, separator + 1 + length).toString('utf-8');
-    const data = JSON.parse(body);
-    
-    return data;
-  } catch (error) {
-    throw new Error(`Decode error: ${error.message}`);
-  }
-};
+const HEADER_SIZE = 12; // 4 bytes each for messageLength, id, responseTo
+
+export default class JSONProtocol {
+  encode = (reqID, response, statusCode) => {
+    // Construct response body according to wire protocol
+    const responseBody = {
+      status: statusCode,
+      message: StatusMessages[statusCode],
+      payload: {
+        value: response
+      }
+    };
+
+    // Convert body to JSON string and then to Buffer
+    const bodyString = JSON.stringify(responseBody);
+    const bodyBuffer = Buffer.from(bodyString, 'utf-8');
+
+    // Calculate total message length (header + body)
+    const messageLength = HEADER_SIZE + bodyBuffer.length;
+
+    // Generate a unique 32-bit response ID
+    const resID = generate32BitId();
+
+    // Create header buffer
+    const headerBuffer = Buffer.allocUnsafe(HEADER_SIZE);
+    headerBuffer.writeUInt32BE(messageLength, 0);   // messageLength
+    headerBuffer.writeUInt32BE(resID, 4);           // id (response id)
+    headerBuffer.writeUInt32BE(reqID, 8);           // responseTo (original request id)
+
+    // Combine header and body
+    return Buffer.concat([headerBuffer, bodyBuffer]);
+  };
+
+  decode = (buffer) => {
+    // Parse header (first 12 bytes)
+    const messageLength = buffer.readUInt32BE(0);
+    const id = buffer.readUInt32BE(4);
+    const responseTo = buffer.readUInt32BE(8);
+
+    // Parse body (remaining bytes)
+    const bodyBuffer = buffer.subarray(HEADER_SIZE, messageLength);
+    const bodyString = bodyBuffer.toString('utf-8');
+    const requestBody = JSON.parse(bodyString);
+
+    // Extract request data according to wire protocol
+    const op = requestBody.op;
+    const ns = requestBody.payload?.ns || null;
+    const key = requestBody.payload?.key || null;
+    const data = requestBody.payload?.value || null;
+
+    // Return: [request ID, operation, namespace, key, data]
+    return [id, op, ns, key, data];
+  };
+}

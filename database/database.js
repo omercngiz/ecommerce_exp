@@ -1,6 +1,7 @@
 import { generateId } from "./utils.js";
 import { readFile, writeFile } from "./file-operations.js";
 import { StatusCodes, Operations } from './constants.js';
+import { log } from './logger.js';
 
 /**
  * Database class for handling CRUD operations on JSON-based file storage
@@ -32,24 +33,30 @@ export default class Database {
         try {
             // Validate operation type
             if (typeof op !== 'string' || !op) {
+                log('WARN', 'Invalid operation type', { op });
                 return [null, StatusCodes.BAD_REQUEST];
             }
 
             // Route to appropriate handler
             switch (op) {
                 case Operations.CREATE:
+                    log('INFO', 'Create operation', { ns, data });
                     return await this.create(ns, data);
                 case Operations.READ:
+                    log('INFO', 'Read operation', { ns, key });
                     return await this.read(ns, key);
                 case Operations.UPDATE:
+                    log('INFO', 'Update operation', { ns, key, data });
                     return await this.update(ns, key, data);
                 case Operations.DELETE:
+                    log('INFO', 'Delete operation', { ns, key });
                     return await this.delete(ns, key);
                 default:
+                    log('WARN', 'Unknown operation', { op });
                     return [null, StatusCodes.BAD_REQUEST];
             }
         } catch (error) {
-            console.error(`[Database.handle] Unexpected error:`, error);
+            log('ERROR', '[Database.handle] Unexpected error', { error });
             return [null, StatusCodes.INTERNAL_SERVER_ERROR];
         }
     }
@@ -74,58 +81,44 @@ export default class Database {
      */
     async create(ns, data) {
         try {
-            // Validate namespace
             if (typeof ns !== 'string' || !ns) {
+                log('WARN', 'Invalid namespace for create', { ns });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Validate data
             if (!data || typeof data !== 'object' || Array.isArray(data)) {
+                log('WARN', 'Invalid data for create', { data });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Prevent ID override
             if (data.id !== undefined) {
+                log('WARN', 'ID override attempt in create', { data });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Read existing data from file (or start with empty array if not found)
             const [existingData, statusCode] = await readFile(ns);
-            
-            // Handle read errors (except NOT_FOUND which is expected for new namespaces)
             if (statusCode !== StatusCodes.OK && statusCode !== StatusCodes.NOT_FOUND) {
+                log('ERROR', 'Read error in create', { ns, statusCode });
                 return [null, statusCode];
             }
-
             const records = statusCode === StatusCodes.NOT_FOUND ? [] : existingData;
-            
-            // Validate that records is an array
             if (!Array.isArray(records)) {
-                console.error(`[Database.create] Expected array in namespace "${ns}", got ${typeof records}`);
+                log('ERROR', `[Database.create] Expected array`, { ns, type: typeof records });
                 return [null, StatusCodes.INTERNAL_SERVER_ERROR];
             }
-            
-            // Generate unique ID and add to the new record
             const newRecord = {
                 id: generateId(),
                 ...data,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
-            
-            // Add new record to the array
             records.push(newRecord);
-            
-            // Write updated data back to file
             const [, writeStatus] = await writeFile(ns, records);
-            
             if (writeStatus !== StatusCodes.OK) {
+                log('ERROR', 'Write error in create', { ns, writeStatus });
                 return [null, writeStatus];
             }
-            
+            log('INFO', 'Record created', { ns, newRecord });
             return [newRecord, StatusCodes.CREATED];
         } catch (error) {
-            console.error(`[Database.create] Unexpected error in namespace "${ns}":`, error);
+            log('ERROR', `[Database.create] Unexpected error`, { ns, error });
             return [null, StatusCodes.INTERNAL_SERVER_ERROR];
         }
     }
@@ -149,44 +142,36 @@ export default class Database {
      */
     async read(ns, key) {
         try {
-            // Validate namespace
             if (typeof ns !== 'string' || !ns) {
+                log('WARN', 'Invalid namespace for read', { ns });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Read data from file
             const [data, statusCode] = await readFile(ns);
-            
             if (statusCode !== StatusCodes.OK) {
+                log('ERROR', 'Read error', { ns, statusCode });
                 return [null, statusCode];
             }
-            
-            // Validate that data is an array
             if (!Array.isArray(data)) {
-                console.error(`[Database.read] Expected array in namespace "${ns}", got ${typeof data}`);
+                log('ERROR', `[Database.read] Expected array`, { ns, type: typeof data });
                 return [null, StatusCodes.INTERNAL_SERVER_ERROR];
             }
-
-            // If no key provided, return all records
             if (!key) {
+                log('INFO', 'Read all records', { ns, count: data.length });
                 return [data, StatusCodes.OK];
             }
-
-            // Validate key
             if (typeof key !== 'string') {
+                log('WARN', 'Invalid key for read', { key });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-            
-            // Find record by ID
             const record = data.find(item => item && item.id === key);
-            
             if (!record) {
+                log('WARN', 'Record not found', { ns, key });
                 return [null, StatusCodes.NOT_FOUND];
             }
-            
+            log('INFO', 'Read record', { ns, key });
             return [record, StatusCodes.OK];
         } catch (error) {
-            console.error(`[Database.read] Unexpected error in namespace "${ns}":`, error);
+            log('ERROR', `[Database.read] Unexpected error`, { ns, error });
             return [null, StatusCodes.INTERNAL_SERVER_ERROR];
         }
     }
@@ -207,63 +192,49 @@ export default class Database {
      */
     async update(ns, key, data) {
         try {
-            // Validate namespace
             if (typeof ns !== 'string' || !ns) {
+                log('WARN', 'Invalid namespace for update', { ns });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Validate key
             if (typeof key !== 'string' || !key) {
+                log('WARN', 'Invalid key for update', { key });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Validate data
             if (!data || typeof data !== 'object' || Array.isArray(data)) {
+                log('WARN', 'Invalid data for update', { data });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Read existing data from file
             const [existingData, statusCode] = await readFile(ns);
-            
             if (statusCode !== StatusCodes.OK) {
+                log('ERROR', 'Read error in update', { ns, statusCode });
                 return [null, statusCode];
             }
-            
-            // Validate that existingData is an array
             if (!Array.isArray(existingData)) {
-                console.error(`[Database.update] Expected array in namespace "${ns}", got ${typeof existingData}`);
+                log('ERROR', `[Database.update] Expected array`, { ns, type: typeof existingData });
                 return [null, StatusCodes.INTERNAL_SERVER_ERROR];
             }
-            
-            // Find record by ID
             const recordIndex = existingData.findIndex(item => item && item.id === key);
-            
             if (recordIndex === -1) {
+                log('WARN', 'Record not found for update', { ns, key });
                 return [null, StatusCodes.NOT_FOUND];
             }
-
             const oldRecord = existingData[recordIndex];
-            
-            // Update the record (keep the original ID and createdAt)
             const updatedRecord = {
                 ...data,
                 id: key,
                 createdAt: oldRecord.createdAt || new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             };
-            
             existingData[recordIndex] = updatedRecord;
-            
-            // Write updated data back to file
             const [, writeStatus] = await writeFile(ns, existingData);
-            
             if (writeStatus !== StatusCodes.OK) {
+                log('ERROR', 'Write error in update', { ns, writeStatus });
                 return [null, writeStatus];
             }
-            
+            log('INFO', 'Record updated', { ns, updatedRecord });
             return [updatedRecord, StatusCodes.OK];
         } catch (error) {
-            console.error(`[Database.update] Unexpected error in namespace "${ns}":`, error);
+            log('ERROR', `[Database.update] Unexpected error`, { ns, error });
             return [null, StatusCodes.INTERNAL_SERVER_ERROR];
         }
     }
@@ -286,50 +257,39 @@ export default class Database {
      */
     async delete(ns, key) {
         try {
-            // Validate namespace
             if (typeof ns !== 'string' || !ns) {
+                log('WARN', 'Invalid namespace for delete', { ns });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Validate key
             if (typeof key !== 'string' || !key) {
+                log('WARN', 'Invalid key for delete', { key });
                 return [null, StatusCodes.BAD_REQUEST];
             }
-
-            // Read existing data from file
             const [existingData, statusCode] = await readFile(ns);
-            
             if (statusCode !== StatusCodes.OK) {
+                log('ERROR', 'Read error in delete', { ns, statusCode });
                 return [null, statusCode];
             }
-            
-            // Validate that existingData is an array
             if (!Array.isArray(existingData)) {
-                console.error(`[Database.delete] Expected array in namespace "${ns}", got ${typeof existingData}`);
+                log('ERROR', `[Database.delete] Expected array`, { ns, type: typeof existingData });
                 return [null, StatusCodes.INTERNAL_SERVER_ERROR];
             }
-            
-            // Find record by ID
             const recordIndex = existingData.findIndex(item => item && item.id === key);
-            
             if (recordIndex === -1) {
+                log('WARN', 'Record not found for delete', { ns, key });
                 return [null, StatusCodes.NOT_FOUND];
             }
-            
-            // Remove the record
             const deletedRecord = existingData[recordIndex];
             existingData.splice(recordIndex, 1);
-            
-            // Write updated data back to file
             const [, writeStatus] = await writeFile(ns, existingData);
-            
             if (writeStatus !== StatusCodes.OK) {
+                log('ERROR', 'Write error in delete', { ns, writeStatus });
                 return [null, writeStatus];
             }
-            
+            log('INFO', 'Record deleted', { ns, deletedRecord });
             return [deletedRecord, StatusCodes.OK];
         } catch (error) {
-            console.error(`[Database.delete] Unexpected error in namespace "${ns}":`, error);
+            log('ERROR', `[Database.delete] Unexpected error`, { ns, error });
             return [null, StatusCodes.INTERNAL_SERVER_ERROR];
         }
     }

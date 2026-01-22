@@ -5,7 +5,8 @@
  */
 
 import net from "net";
-import { decode } from "./json-protocol.js";
+import Database from "./database.js";
+import JSONProtocol from "./json-protocol.js";
 
 /**
  * Connected clients counter
@@ -13,6 +14,8 @@ import { decode } from "./json-protocol.js";
  * @description Tracks the number of currently connected clients
  */
 let connectedClients = 0;
+const db = new Database();
+const protocol = new JSONProtocol();
 
 /**
  * TCP Server Instance
@@ -30,17 +33,41 @@ const server = net.createServer((socket) => {
     console.log(`Client connected: ${clientInfo}`);
     console.log(`Connected clients: ${connectedClients}`);
 
+    socket.accBuffer = Buffer.alloc(0);
+
     /**
      * Handle incoming data from connected clients
      * @event socket#data
      * @param {Buffer} data - Raw data buffer received from client
      */
-    socket.on("data", (data) => {
-      try {
-        const message = decode(data);
-        console.log("Received message:", message);
-      } catch (error) {
-        console.error("Data error:", error.message);
+    socket.on("data", (chunk) => {
+      socket.accBuffer = Buffer.concat([socket.accBuffer, chunk]);
+
+      while (true) {
+        if (socket.accBuffer.length < protocol.HEADER_SIZE) {
+          break;
+        }
+
+        const messageLength = socket.accBuffer.readUInt32BE(0);
+
+        if (socket.accBuffer.length < messageLength) {
+            break;
+        }
+
+        const fullMessage = socket.accBuffer.slice(0, messageLength);
+        socket.accBuffer = socket.accBuffer.slice(messageLength);
+        
+        try {
+          const [reqID, op, ns, key, data] = protocol.decode(fullMessage);
+          const [value, statusCode] = db.handle(op, ns, key, data);
+          const response = protocol.encode(reqID, value, statusCode);
+          socket.write(response);
+        } catch (error) {
+          console.error("Request handling error:", error.message);
+          // Hata durumunda istemciye response gönder
+          const errorResponse = protocol.encode(0, null, StatusCodes.INTERNAL_SERVER_ERROR);
+          socket.write(errorResponse);
+        }
       }
     });
 

@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import server from './tcp-connection.js';
+
+let PORT;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-let PORT;
 
 try {
   dotenv.config({ path: path.join(__dirname, '.env') });

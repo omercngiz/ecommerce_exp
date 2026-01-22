@@ -7,6 +7,7 @@
 import net from "net";
 import Database from "./database.js";
 import JSONProtocol from "./json-protocol.js";
+import { StatusCodes } from "./status-codes.js";
 
 /**
  * Connected clients counter
@@ -40,7 +41,7 @@ const server = net.createServer((socket) => {
      * @event socket#data
      * @param {Buffer} data - Raw data buffer received from client
      */
-    socket.on("data", (chunk) => {
+    socket.on("data", async (chunk) => {
       socket.accBuffer = Buffer.concat([socket.accBuffer, chunk]);
 
       while (true) {
@@ -59,7 +60,7 @@ const server = net.createServer((socket) => {
         
         try {
           const [reqID, op, ns, key, data] = protocol.decode(fullMessage);
-          const [value, statusCode] = db.handle(op, ns, key, data);
+          const [value, statusCode] = await db.handle(op, ns, key, data);
           const response = protocol.encode(reqID, value, statusCode);
           socket.write(response);
         } catch (error) {

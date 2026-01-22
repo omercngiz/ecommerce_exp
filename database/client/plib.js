@@ -3,8 +3,9 @@
  * JSON Protocol compatible client library
  */
 
-const HEADER_SIZE = 12; // 4 bytes each for messageLength, id, responseTo
-import { generate32BitId } from "./utils.js";
+import { generate32BitId } from "../utils.js";
+
+const HEADER_SIZE = 12; // 4 bytes each for messageLength, id/, responseTo
 
 /**
  * Encode a request to send to the database server

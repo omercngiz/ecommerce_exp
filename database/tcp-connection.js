@@ -8,6 +8,7 @@ import net from "net";
 import Database from "./database.js";
 import JSONProtocol from "./json-protocol.js";
 import { StatusCodes } from "./constants.js";
+import { log } from "./logger.js";
 
 /**
  * Connected clients counter
@@ -15,6 +16,7 @@ import { StatusCodes } from "./constants.js";
  * @description Tracks the number of currently connected clients
  */
 let connectedClients = 0;
+
 const db = new Database();
 const protocol = new JSONProtocol();
 
@@ -31,8 +33,7 @@ const server = net.createServer((socket) => {
      */
     connectedClients++;
     const clientInfo = `${socket.remoteAddress}:${socket.remotePort}`;
-    console.log(`Client connected: ${clientInfo}`);
-    console.log(`Connected clients: ${connectedClients}`);
+    log('INFO', 'Client connected', { clientInfo, connectedClients });
 
     socket.accBuffer = Buffer.alloc(0);
 
@@ -43,6 +44,8 @@ const server = net.createServer((socket) => {
      */
     socket.on("data", async (chunk) => {
       socket.accBuffer = Buffer.concat([socket.accBuffer, chunk]);
+
+      log('DEBUG', 'Data received', { bytes: chunk.length, chunk });
 
       while (true) {
         if (socket.accBuffer.length < protocol.HEADER_SIZE) {
@@ -59,12 +62,13 @@ const server = net.createServer((socket) => {
         socket.accBuffer = socket.accBuffer.slice(messageLength);
         
         try {
+          log('DEBUG', 'Full message received', { messageLength, fullMessage });
           const [reqID, op, ns, key, data] = protocol.decode(fullMessage);
           const [value, statusCode] = await db.handle(op, ns, key, data);
           const response = protocol.encode(reqID, value, statusCode);
           socket.write(response);
         } catch (error) {
-          console.error("Request handling error:", error.message);
+          log('ERROR', 'Request handling error', { error });
           // Hata durumunda istemciye response gönder
           const errorResponse = protocol.encode(0, null, StatusCodes.INTERNAL_SERVER_ERROR);
           socket.write(errorResponse);
@@ -80,10 +84,9 @@ const server = net.createServer((socket) => {
     socket.on("end", () => {
       try {
         connectedClients--;
-        console.log("Client disconnected");
-        console.log(`Connected clients: ${connectedClients}`);
+        log('INFO', 'Client disconnected', { connectedClients });
       } catch (error) {
-        console.error("Disconnect error:", error.message);
+        log('ERROR', 'Disconnect error', { error });
       }
     });
 
@@ -93,10 +96,10 @@ const server = net.createServer((socket) => {
      * @param {Error} error - Socket error object
      */
     socket.on("error", (error) => {
-      console.error("Socket error:", error.message);
+      log('ERROR', 'Socket error', { error });
     });
   } catch (error) {
-    console.error("Connection error:", error.message);
+    log('ERROR', 'Connection error', { error });
     socket.destroy();
   }
 });
@@ -110,14 +113,14 @@ const server = net.createServer((socket) => {
 server.on("error", (error) => {
   try {
     if (error.code === "EADDRINUSE") {
-      console.error(`Error: Port is already in use.`);
+      log('ERROR', 'Port is already in use', { errorCode: error.code });
     } else if (error.code === "EACCES") {
-      console.error(`Error: Permission denied to use port.`);
+      log('ERROR', 'Permission denied to use port', { errorCode: error.code });
     } else {
-      console.error("Server error:", error);
+      log('ERROR', 'Server error', { error });
     }
   } catch (err) {
-    console.error("Error handler failed:", err);
+    log('ERROR', 'Error handler failed', { error: err });
   } finally {
     process.exit(1);
   }
@@ -130,11 +133,11 @@ server.on("error", (error) => {
  * @description Attempts graceful shutdown before exiting with error code
  */
 process.on("uncaughtException", (error) => {
-  console.error("Uncaught Exception:", error);
+  log('ERROR', 'Uncaught exception', { error });
 
   try {
     server.close(() => {
-      console.error("Server closed");
+      log('INFO', 'Server closed due to uncaught exception');
       process.exit(1);
     });
 
@@ -142,7 +145,7 @@ process.on("uncaughtException", (error) => {
       process.exit(1);
     }, 5000);
   } catch (err) {
-    console.error("Shutdown error:", err);
+    log('ERROR', 'Shutdown error', { error: err });
     process.exit(1);
   }
 });
@@ -154,11 +157,11 @@ process.on("uncaughtException", (error) => {
  * @description Attempts graceful shutdown before exiting with error code
  */
 process.on("unhandledRejection", (reason) => {
-  console.error("Unhandled Rejection:", reason);
+  log('ERROR', 'Unhandled rejection', { reason });
 
   try {
     server.close(() => {
-      console.error("Server closed");
+      log('INFO', 'Server closed due to unhandled rejection');
       process.exit(1);
     });
 
@@ -166,7 +169,7 @@ process.on("unhandledRejection", (reason) => {
       process.exit(1);
     }, 5000);
   } catch (err) {
-    console.error("Shutdown error:", err);
+    log('ERROR', 'Shutdown error', { error: err });
     process.exit(1);
   }
 });
@@ -177,11 +180,11 @@ process.on("unhandledRejection", (reason) => {
  * @description Closes server connections and exits gracefully with timeout fallback
  */
 process.on("SIGINT", () => {
-  console.log("\nShutting down...");
+  log('INFO', 'Shutting down (SIGINT)');
 
   try {
     server.close(() => {
-      console.log("Server closed");
+      log('INFO', 'Server closed gracefully');
       process.exit(0);
     });
 
@@ -189,7 +192,7 @@ process.on("SIGINT", () => {
       process.exit(1);
     }, 10000);
   } catch (error) {
-    console.error("Shutdown error:", error);
+    log('ERROR', 'Shutdown error', { error });
     process.exit(1);
   }
 });
@@ -200,11 +203,11 @@ process.on("SIGINT", () => {
  * @description Closes server connections and exits gracefully with timeout fallback
  */
 process.on("SIGTERM", () => {
-  console.log("\nShutting down...");
+  log('INFO', 'Shutting down (SIGTERM)');
 
   try {
     server.close(() => {
-      console.log("Server closed");
+      log('INFO', 'Server closed gracefully');
       process.exit(0);
     });
 
@@ -212,7 +215,7 @@ process.on("SIGTERM", () => {
       process.exit(1);
     }, 10000);
   } catch (error) {
-    console.error("Shutdown error:", error);
+    log('ERROR', 'Shutdown error', { error });
     process.exit(1);
   }
 });

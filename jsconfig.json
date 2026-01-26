@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    /* Language & runtime */
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    /* Type checking behavior */
+    "checkJs": true,
+    "strict": true,
+    "noImplicitAny": true,
+
+    /* Interop & quality of life */
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    /* This is critical */
+    "skipLibCheck": true
+  },
+
+  "include": [
+    "./**/*.js"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
+}

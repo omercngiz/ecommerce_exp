@@ -3,7 +3,7 @@
  * JSON Protocol compatible client library
  */
 
-import { generate32BitId } from "../utils.js";
+import { generate32BitId } from "../utils/utils.js";
 
 const HEADER_SIZE = 12; // 4 bytes each for messageLength, id/, responseTo
 

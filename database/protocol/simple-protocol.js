@@ -65,7 +65,7 @@
  * @version 1.0.0
  */
 
-import { StatusMessages } from "../protocol/constants.js";
+import { StatusMessages } from "./protocol-constants.js";
 import { generate32BitId } from "../utils/utils.js";
 import EnvConfig from "../env-config.js";
 

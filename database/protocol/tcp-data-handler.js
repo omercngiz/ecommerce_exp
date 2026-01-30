@@ -15,7 +15,7 @@
 
 import SimpleProtocol from "./simple-protocol.js";
 import Database from "../db_app/database.js";
-import { StatusCodes, StatusMessages } from "./constants.js";
+import { StatusCodes, StatusMessages } from "./protocol-constants.js";
 import { log } from "../utils/logger.js";
 import EnvConfig from "../env-config.js";
 

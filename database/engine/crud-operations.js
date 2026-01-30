@@ -1,6 +1,6 @@
 import { generateId } from "../utils/utils.js";
 import { readFile, writeFile } from "./file-operations.js";
-import { StatusCodes } from "../protocol/constants.js";
+import { StatusCodes } from "../protocol/protocol-constants.js";
 import { log } from "../utils/logger.js";
 
 // Operation types

@@ -5,7 +5,5 @@ coverage/
 dist/
 build/
 *.log
-notlar.txt
-jsonDB.txt
-wire-protocol.txt
+*.txt
 docs

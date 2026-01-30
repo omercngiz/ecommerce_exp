@@ -16,6 +16,10 @@
  * |  messageLength  |      id      |   responseTo   |
  * ---------------------------------------------------
  * 
+ * - messageLength: Total size of the message in bytes (header + body)
+ * - id: Unique identifier for the request
+ * - responseTo: Identifier of the request this message is responding to
+ * 
  * ________________________________________________________________________________
  * |                                     Request Body                             |
  * --------------------------------------------------------------------------------
@@ -23,6 +27,11 @@
  * |                                |----------------------------------------------
  * |  CREATE, READ, UPDATE, DELETE  |      Namespace      |   Key   |    Value    |
  * --------------------------------------------------------------------------------
+ * 
+ * - Operation: The database operation to perform
+ * - Namespace: The namespace (or collection) for the operation
+ * - Key: The key for the operation
+ * - Value: An object that contains the data for the operation
  * 
  * ________________________________________________________________________________
  * |                                     Response Body                            |
@@ -32,7 +41,28 @@
  * |100:continue 200:ok 201:created |       message       |        Value          |
  * --------------------------------------------------------------------------------
  * 
+ * - Status Code: Numeric status code indicating the result of the operation
+ * - Message: Human-readable message corresponding to the status code
+ * - Value: An object containing the result of the operation
+ * 
+ * All status codes:
+ * 100: "continue"
+ * 200: "ok"
+ * 201: "created"
+ * 202: "accepted"
+ * 400: "bad request"
+ * 404: "not found"
+ * 408: "request timeout"
+ * 411: "length required"
+ * 413: "content too large"
+ * 500: "internal server error"
+ * 501: "not implemented"
+ * 503: "service unavailable"
+ * 
  * @module simple-protocol
+ * @author Ömer Cengiz
+ * @license MIT
+ * @version 1.0.0
  */
 
 import { StatusMessages } from "../protocol/constants.js";

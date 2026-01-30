@@ -14,7 +14,7 @@
  */
 
 import SimpleProtocol from "./simple-protocol.js";
-import { handle } from "../engine/crud-operations.js";
+import { handle } from "../engine/database-api.js";
 import { StatusCodes, StatusMessages } from "./protocol-constants.js";
 import { log } from "../utils/logger.js";
 import EnvConfig from "../env-config.js";

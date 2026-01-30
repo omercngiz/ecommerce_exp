@@ -59,6 +59,13 @@
  * 501: "not implemented"
  * 503: "service unavailable"
  * 
+ * This module responsible for implementing encoding and decoding according
+ * to the Simple Wire Protocol specifications as described above.
+ * 
+ * Functions:
+ * - encode(requestID, response, statusCode): Buffer
+ * - decode(buffer): [requestID, operation, namespace, key, data]
+ * 
  * @module simple-protocol
  * @author Ömer Cengiz
  * @license MIT

@@ -1,7 +1,16 @@
 import { generateId } from "../utils/utils.js";
-import { readFile, writeFile } from "../db_app/file-operations.js";
-import { StatusCodes, Operations } from '../protocol/constants.js';
+import { readFile, writeFile } from "../engine/file-operations.js";
+import { StatusCodes } from '../protocol/constants.js';
 import { log } from '../utils/logger.js';
+
+// Operation types
+const Operations = {
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE'
+};
+
 
 /**
  * Database class for handling CRUD operations on JSON-based file storage
@@ -20,14 +29,14 @@ export default class Database {
     /**
      * Handle a database operation based on the operation type
      * 
-     * @param {string} op - Operation type (INSERT, GET, SET, DELETE)
+     * @param {string} op - Operation type (CREATE, READ, UPDATE, DELETE)
      * @param {string} ns - Namespace (collection name)
      * @param {string|null} key - Record key/ID (optional for some operations)
      * @param {Object|null} data - Data payload (optional for some operations)
      * @returns {Promise<[any, number]>} Promise resolving to tuple of [result, statusCode]
      * 
      * @example
-     * const [result, status] = await db.handle(Operations.GET, 'users', 'user123', null);
+     * const [result, status] = await db.handle(Operations.READ, 'users', 'user123', null);
      */
     async handle(op, ns, key, data) {
         try {

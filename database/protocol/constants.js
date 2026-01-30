@@ -3,14 +3,6 @@
 // Protocol version
 export const PROTOCOL_VERSION = 1;
 
-// Operation types
-export const Operations = {
-  CREATE: 'CREATE',
-  READ: 'READ',
-  UPDATE: 'UPDATE',
-  DELETE: 'DELETE'
-};
-
 // Status codes
 export const StatusCodes = {
   CONTINUE: 100,

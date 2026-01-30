@@ -133,7 +133,6 @@ export default class SimpleProtocol {
    * @throws {Error} If JSON parsing fails or message format is invalid
    */
   decode = (buffer) => {
-    try {
       // Validate input
       if (!Buffer.isBuffer(buffer)) {
         throw new TypeError(`Expected Buffer, got ${typeof buffer}`);
@@ -207,12 +206,5 @@ export default class SimpleProtocol {
 
       // Return: [request ID, operation, namespace, key, data]
       return [id, op, ns, key, data];
-    } catch (error) {
-      // Re-throw with additional context
-      if (error instanceof TypeError || error instanceof RangeError) {
-        throw error;
-      }
-      throw new Error(`Failed to decode message: ${error.message}`);
-    }
-  };
+  }
 }

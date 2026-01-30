@@ -22,11 +22,11 @@
 import { createServer } from './connection/tcp-connection.js';
 import TCPDataHandler from './protocol/protocol-bridge.js';
 import EnvConfig from './env-config.js';
-import { initServer } from './connection/init-server.js';
+import { initServer } from './middlewares/init-server.js';
 
-import globalErrorHandler from './global-handlers/global-error-handler.js';
-import serverErrorHandler from './global-handlers/server-error-handler.js';
-import shutdownHandler from './global-handlers/shutdown-handler.js';
+import globalErrorHandler from './middlewares/global-error-handler.js';
+import serverErrorHandler from './middlewares/server-error-handler.js';
+import shutdownHandler from './middlewares/server-shutdown-handler.js';
 
 /**
  * TCP Server Instance

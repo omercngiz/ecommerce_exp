@@ -16,7 +16,6 @@
  * Simple protocol  --(Encoded Data Buffer)-->      TCP Server
  * TCP Server       --(Encoded Data Buffer)-->      Client
  *
- * MAX_PAYLOAD_SIZE = configurable via .env (default: 5 MB)
  * MAX_CONNECTIONS = configurable via .env (default: 1000)
  * TIMEOUT_MS = configurable via .env (default: 300000 ms)
  *

@@ -42,7 +42,7 @@
 import net from "net";
 import { log } from "../utils/logger.js";
 import EnvConfig from "../env-config.js";
-import { metrics } from "./metrics.js";
+import { metrics } from "./connection-metrics.js";
 
 /**
  * Creates and returns a TCP server instance that:
@@ -53,18 +53,18 @@ import { metrics } from "./metrics.js";
  *
  * Errors are emitted via 'error' events on the server or socket.
  * 
- * @typedef {import("../protocol/protocol-bridge.js").default} TCPDataHandler
- * @param {TCPDataHandler} DataHandler - Instance of TCPDataHandler class
+ * @typedef {import("../protocol/protocol-bridge.js").default} ProtocolBridge
+ * @param {ProtocolBridge} ProtocolBridge - Instance of ProtocolBridge class
  * @returns {import("net").Server} - TCP Server Instance
  * 
  * @example
  * import { createServer } from './tcp-connection.js';
  * import { handleData } from './data-handler.js';
  * 
- * const server = createServer(new TCPDataHandler());
+ * const server = createServer(new ProtocolBridge());
  * server.listen(51234);
  */
-export function createServer(DataHandler) {
+export function createServer(ProtocolBridge) {
   return net.createServer((socket) => {
     if (metrics.getSnapshot().activeConnections >= EnvConfig.get_max_connections()) {
       log(
@@ -73,7 +73,7 @@ export function createServer(DataHandler) {
         socket.remotePort,
       );
       metrics.incrementErrorCount();
-      DataHandler.handleSocketError("Server at max capacity");
+      ProtocolBridge.handleSocketError("Server at max capacity");
       socket.destroy();
       return;
     }
@@ -100,7 +100,7 @@ export function createServer(DataHandler) {
     socket.on("timeout", () => {
       log("WARN", "Socket timeout, destroying connection");
       metrics.incrementErrorCount();
-      socket.write(DataHandler.handleSocketError("Socket timeout"));
+      socket.write(ProtocolBridge.handleSocketError("Socket timeout"));
       socket.destroy();
       socket.removeAllListeners();
     });
@@ -124,19 +124,19 @@ export function createServer(DataHandler) {
       try {
         socket.pause();
         metrics.addBytesRead(chunk.length);
-        const response = await DataHandler.handleRequest(chunk);
+        const response = await ProtocolBridge.handleRequest(chunk);
         if (Buffer.isBuffer(response)) {
           socket.write(response);
           metrics.addBytesWritten(response.length);
         } else {
           log("WARN", "No response generated for the received data chunk");
-          socket.write(DataHandler.handleSocketError("No response generated"));
+          socket.write(ProtocolBridge.handleSocketError("No response generated"));
         }
         socket.resume();
       } catch (error) {
         log("ERROR", "Data handling failed", { error });
         metrics.incrementErrorCount();
-        socket.write(DataHandler.handleSocketError("Data handling failed"));
+        socket.write(ProtocolBridge.handleSocketError("Data handling failed"));
         socket.destroy();
         socket.removeAllListeners();
       }
@@ -187,7 +187,7 @@ export function createServer(DataHandler) {
      */
     socket.on("error", (error) => {
       log("ERROR", "Socket error", { error });
-      socket.write(DataHandler.handleSocketError(error.message));
+      socket.write(ProtocolBridge.handleSocketError(error.message));
       metrics.incrementErrorCount();
       socket.destroy();
     });

@@ -53,7 +53,7 @@ import { metrics } from "./metrics.js";
  *
  * Errors are emitted via 'error' events on the server or socket.
  * 
- * @typedef {import("../protocol/tcp-data-handler.js").default} TCPDataHandler
+ * @typedef {import("../protocol/protocol-bridge.js").default} TCPDataHandler
  * @param {TCPDataHandler} DataHandler - Instance of TCPDataHandler class
  * @returns {import("net").Server} - TCP Server Instance
  * 

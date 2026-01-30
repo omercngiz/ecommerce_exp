@@ -1,7 +1,7 @@
 /**
  * @fileoverview
  *
- * TCP Data Handler Module
+ * Protocol Bridge Module
  *
  * Responsibilities:
  *  - Get incoming TCP data streams as raw Buffer objects.
@@ -10,27 +10,26 @@
  *  - Decode and process requests using the Database module.
  *  - Return encoded responses according to the JSON wire protocol.
  *
- * @module tcp-data-handler
+ * @module protocol-bridge
  */
 
 import SimpleProtocol from "./simple-protocol.js";
-import Database from "../db_app/database.js";
+import { handle } from "../engine/crud-operations.js";
 import { StatusCodes, StatusMessages } from "./protocol-constants.js";
 import { log } from "../utils/logger.js";
 import EnvConfig from "../env-config.js";
 
 const protocol = new SimpleProtocol();
-const db = new Database();
 const MAX_PAYLOAD_SIZE = EnvConfig.get_max_payload_size();
 
 let accBuffer = Buffer.alloc(0);
   
 /**
- * TCP Data Handler Class
+ * Protocol Bridge Class
  * 
  * Handles parsing, decoding, processing, and encoding of TCP data.
  */
-export default class TCPDataHandler {
+export default class ProtocolBridge {
   /**
    * Parses incoming data according to the JSON wire protocol,
    * buffering incomplete data to correctly handle partial messages,
@@ -64,7 +63,7 @@ export default class TCPDataHandler {
 
       try {
         const [reqID, op, ns, key, data] = protocol.decode(fullMessage);
-        const [value, statusCode] = await db.handle(op, ns, key, data);
+        const [value, statusCode] = await handle(op, ns, key, data);
         const response = protocol.encode(reqID, value, statusCode);
         return response;
       } catch (error) {

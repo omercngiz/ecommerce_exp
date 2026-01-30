@@ -20,7 +20,7 @@
  */
 
 import { createServer } from './connection/tcp-connection.js';
-import TCPDataHandler from './protocol/tcp-data-handler.js';
+import TCPDataHandler from './protocol/protocol-bridge.js';
 import EnvConfig from './env-config.js';
 import { initServer } from './connection/init-server.js';
 

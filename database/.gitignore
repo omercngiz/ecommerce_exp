@@ -6,4 +6,6 @@ dist/
 build/
 *.log
 notlar.txt
+jsonDB.txt
+wire-protocol.txt
 docs

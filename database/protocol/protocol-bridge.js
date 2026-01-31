@@ -87,5 +87,7 @@ export default class ProtocolBridge {
   handleSocketError = (message) => {
     return protocol.encode(0, {message}, StatusCodes.SOCKET_ERROR);
   };
+
+  // todo: handleSocketError will be replaced with errorDespatcher() in the future
 }
 

@@ -10,6 +10,15 @@ import BaseError from "./base-error.js";
  * @property {Object} [meta={}] - Additional metadata related to the error.
  */
 export class ProtocolError extends BaseError {
+    static codes = Object.freeze({
+    INVALID_FORMAT: "PROTOCOL_INVALID_FORMAT",
+    UNSUPPORTED_VERSION: "PROTOCOL_UNSUPPORTED_VERSION",
+    DISTORTED_HEADER: "PROTOCOL_DISTORTED_HEADER",
+    SERIALIZATION_FAILURE: "PROTOCOL_SERIALIZATION_FAILURE",
+    ENCODING_ERROR: "PROTOCOL_ENCODING_ERROR",
+    DECODING_ERROR: "PROTOCOL_DECODING_ERROR",
+  });
+
   /**
    * @param {string} message
    * @param {string} code

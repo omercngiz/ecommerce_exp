@@ -1,6 +1,15 @@
 /**
  * Custom Error Module
  * Defines a custom error class for database operations.
+ * 
+ * Error flow:
+ * Error occurs in a module -> Error instance is created
+ * Error instance catched in a higher layer -> error policy called and error formatted
+ * Formatted error sent to logging system
+ * Formatted error sent to protocol-bridge -> Buffer response created
+ * Buffer response sent to tcp-connection -> response sent to client
+ * 
+ * 
  * @module database/error_module/custom-error
  */
 
@@ -14,8 +23,8 @@
  * @property {string} code - Error code.
  * @property {string} layer - The module layer where the error originated.
  * @property {string} source - The code block or function where the error originated.
- * @property {Severity} [severity=40] - Severity level of the error.
- * @property {Error|null} [cause=null] - Underlying cause of the error.
+ * @property {Severity} severity=40 - Severity level of the error.
+ * @property {Error|null} cause=null - Underlying cause of the error.
  * @property {Object} [meta={}] - Additional metadata related to the error.
  */
 export default class BaseError extends Error {
@@ -31,16 +40,16 @@ export default class BaseError extends Error {
    * @param {BaseErrorParams} params - Parameters for the error.
    */
   constructor({
-    message,
     code,
-    layer,
     source,
-    severity = BaseError.SEVERITY.ERROR,
     cause = null,
     meta = {},
+    message,
+    layer,
+    severity = BaseError.SEVERITY.ERROR,
   }) {
     if (!message || !code || !layer || !source) {
-      throw new TypeError("BaseError requires message, code, layer, and source.");
+      console.warn("Invalid BaseError construction", arguments);
     }
 
     super(message);
@@ -52,7 +61,8 @@ export default class BaseError extends Error {
     this.severity = Object.values(BaseError.SEVERITY).includes(severity)
       ? severity
       : BaseError.SEVERITY.ERROR;
-    this.meta = { timestamp: new Date().toISOString(), ...meta };
+    this.timestamp = new Date().toISOString();
+    this.meta = meta;
 
     if (cause) {
       this.cause = cause;

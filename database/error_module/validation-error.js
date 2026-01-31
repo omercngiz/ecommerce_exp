@@ -10,6 +10,12 @@ import BaseError from "./base-error.js";
  * @property {Object} [meta={}] - Additional metadata related to the error.
  */
 export class ValidationError extends BaseError {
+    static codes = Object.freeze({
+    INVALID_INPUT: "VALIDATION_INVALID_INPUT",
+    MISSING_FIELD: "VALIDATION_MISSING_FIELD",
+    TYPE_MISMATCH: "VALIDATION_TYPE_MISMATCH",
+    OUT_OF_RANGE: "VALIDATION_OUT_OF_RANGE",
+  });
   /**
    * @param {string} message
    * @param {string} code

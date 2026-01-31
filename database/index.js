@@ -10,6 +10,24 @@
  * 
  * This file represents the main runtime boundary of the application.
  * 
+ * Data flow diagram:
+ * Client               --(Encoded Data Buffer)-->      "tcp-server"
+ * "tcp-server"         --(Encoded Data Buffer)-->      "protocol-bridge"
+ * "protocol-bridge"    --(Decoded Request Object)-->   "protocol-adapter"
+ * "protocol-adapter"   --(Database Request)-->         "database-api"
+ * "database-api"       --(Database Response)-->        "protocol-adapter"
+ * "protocol-adapter"   --(Response Object)-->          "protocol-bridge"
+ * "protocol-bridge"    --(Encoded Data Buffer)-->      "tcp-server"
+ * "tcp-server"         --(Encoded Data Buffer)-->      Client
+ *
+ * Error flow diagram:
+ * Module A(any) throws Error: caught immediately, new CustomError instance created and thrown up
+ * Module B(higher level) --(catch Error)-->       "error-policy" called and error formatted
+ * Module B               --(formatted error)-->   "error-logger"
+ * Module B               --(formatted error)-->   "protocol-bridge"
+ * "protocol-bridge"      --(Buffer response)-->   "tcp-connection"
+ * "tcp-connection"       --(Buffer response)-->   Client
+ * 
  * @module index
  * @author Ömer Cengiz
  * @license MIT

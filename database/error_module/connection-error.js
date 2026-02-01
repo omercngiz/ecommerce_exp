@@ -58,5 +58,3 @@ export class ConnectionError extends BaseError {
     });
   }
 }
-
-// throw new ConnectionError(ConnectionError.codes.CONNECTION_REFUSED, "connection.tcp-connection", { host: "localhost", port: 5432 });

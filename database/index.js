@@ -22,12 +22,12 @@
  *
  * Error flow diagram:
  * Module A(any) throws Error: caught immediately, new CustomError instance created and thrown up
- * Module B(higher level) --(catch Error)-->                    "error-policy"
- * "error-policy"         --(error formatted for server)-->     "error-logger"
- * "error-policy"         --(error formatted for client)-->     "protocol-adapter"
- * "protocol-adapter"     --(error formatted for protocol)-->   "protocol-bridge"
- * "protocol-bridge"      --(Buffer response)-->                "tcp-connection"
- * "tcp-connection"       --(Buffer response)-->                Client
+ * Module B(higher level) --(catch Error)-->                     "error-policy"
+ * "error-policy"         --(error, formatted for server)-->     "error-logger"
+ * "error-policy"         --(error, formatted for client)-->     "protocol-adapter"
+ * "protocol-adapter"     --(error, formatted for protocol)-->   "protocol-bridge"
+ * "protocol-bridge"      --(Buffer response)-->                 "tcp-connection"
+ * "tcp-connection"       --(Buffer response)-->                 Client
  * 
  * @module index
  * @author Ömer Cengiz

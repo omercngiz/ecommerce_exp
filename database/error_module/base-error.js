@@ -2,14 +2,6 @@
  * Custom Error Module
  * Defines a custom error class for database operations.
  * 
- * Error flow:
- * Error occurs in a module -> Error instance is created
- * Error instance catched in a higher layer -> error policy called and error formatted
- * Formatted error sent to logging system
- * Formatted error sent to protocol-bridge -> Buffer response created
- * Buffer response sent to tcp-connection -> response sent to client
- * 
- * 
  * @module database/error_module/custom-error
  */
 
@@ -49,7 +41,7 @@ export default class BaseError extends Error {
     severity = BaseError.SEVERITY.ERROR,
   }) {
     if (!message || !code || !layer || !source) {
-      console.warn("Invalid BaseError construction", arguments);
+      throw new Error("Invalid BaseError construction");
     }
 
     super(message);
@@ -62,7 +54,7 @@ export default class BaseError extends Error {
       ? severity
       : BaseError.SEVERITY.ERROR;
     this.timestamp = new Date().toISOString();
-    this.meta = meta;
+    this.meta = { ...meta };
 
     if (cause) {
       this.cause = cause;

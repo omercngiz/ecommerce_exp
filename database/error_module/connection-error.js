@@ -20,16 +20,23 @@ export class ConnectionError extends BaseError {
 
   });
 
+  /**
+   * @typedef {keyof typeof ConnectionError.codes} ConnectionErrorCode
+   * @typedef {typeof BaseError.SEVERITY[keyof typeof BaseError.SEVERITY]} SeverityValue
+   */
+
+  /** @type {Readonly<Record<ConnectionErrorCode, SeverityValue>>} */
   static severityMap = Object.freeze({
     SOCKET_TIMEOUT: BaseError.SEVERITY.WARNING,
-    REFUSED: BaseError.SEVERITY.ERROR,
-    RESET: BaseError.SEVERITY.ERROR,
+    CONNECTION_REFUSED: BaseError.SEVERITY.ERROR,
+    CONNECTION_RESET: BaseError.SEVERITY.ERROR,
     UNKNOWN_HOST: BaseError.SEVERITY.CRITICAL,
     MAX_CONNECTION_REACHED: BaseError.SEVERITY.CRITICAL,
     NO_RESPONSE_GENERATED: BaseError.SEVERITY.ERROR,
     SOCKET_ERROR: BaseError.SEVERITY.ERROR,
   });
 
+  /** @type {Readonly<Record<ConnectionErrorCode, string>>} */
   static errorMessageMap = Object.freeze({
     SOCKET_TIMEOUT: "The connection has timed out.",
     CONNECTION_REFUSED: "The connection was refused by the server.",
@@ -41,7 +48,7 @@ export class ConnectionError extends BaseError {
   });
 
   /**
-   * @param {string} code
+   * @param {ConnectionErrorCode} code
    * @param {string} source
    * @param {Error|null} cause
    * @param {Object} [meta={}]

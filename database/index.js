@@ -22,7 +22,7 @@
  *
  * Error flow diagram:
  * Module A(any) throws Error: caught immediately, new CustomError instance created and thrown up
- * Module B(higher level) --(catch Error)-->                     "error-policy"
+ * "tcp-connection"       --(catch Error)-->                     "error-policy"
  * "error-policy"         --(error, formatted for server)-->     "error-logger"
  * "error-policy"         --(error, formatted for client)-->     "protocol-adapter"
  * "protocol-adapter"     --(error, formatted for protocol)-->   "error-policy"
@@ -39,23 +39,11 @@
  *  - PORT {number} - TCP server listening port.
  */
 
-import { createServer } from './connection/tcp-connection.js';
-import TCPDataHandler from './protocol/protocol-bridge.js';
 import EnvConfig from './env-config.js';
 import { initServer } from './middlewares/init-server.js';
+import server from './connection/init-custom-server.js';
 
-import globalErrorHandler from './middlewares/global-error-handler.js';
-import serverErrorHandler from './middlewares/server-error-handler.js';
-import shutdownHandler from './middlewares/server-shutdown-handler.js';
-
-/**
- * TCP Server Instance
- * @type {import("net").Server}
- */
-const server = createServer(new TCPDataHandler());
-globalErrorHandler(server);
-shutdownHandler(server);
-serverErrorHandler(server);
+console.log(`json-database daemon starting...`);
 
 /**
  * Server Port

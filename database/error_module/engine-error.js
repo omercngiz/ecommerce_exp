@@ -28,23 +28,70 @@ export class EngineError extends BaseError {
         WRITE_PERMISSION_DENIED: 'ENGINE_WRITE_PERMISSION_DENIED',
         NOT_ENOUGH_DISK_SPACE: 'ENGINE_NOT_ENOUGH_DISK_SPACE',
         INVALID_JSON_IN_FILE: 'ENGINE_INVALID_JSON_IN_FILE',
+    });
 
-    })
+    /**
+     * @typedef {keyof typeof EngineError.codes} EngineErrorCode
+     * @typedef {typeof BaseError.SEVERITY[keyof typeof BaseError.SEVERITY]} SeverityValue
+     */
+
+    /** @type {Readonly<Record<EngineErrorCode, SeverityValue>>} */
+    static severityMap = Object.freeze({
+        UNKNOWN_OPERATION: BaseError.SEVERITY.ERROR,
+        INVALID_NAMESPACE: BaseError.SEVERITY.WARNING,
+        INVALID_KEY: BaseError.SEVERITY.WARNING,
+        INVALID_DATA_FORMAT: BaseError.SEVERITY.ERROR,
+        ID_OVERRIDE_ATTEMPT: BaseError.SEVERITY.CRITICAL,
+        RECORD_NOT_FOUND: BaseError.SEVERITY.INFO,
+        REPO_CREATION_FAILED: BaseError.SEVERITY.CRITICAL,
+        REPO_ACCESS_FAILED: BaseError.SEVERITY.CRITICAL,
+        FILE_NOT_FOUND: BaseError.SEVERITY.INFO,
+        FILE_READ_ERROR: BaseError.SEVERITY.ERROR,
+        FILE_WRITE_ERROR: BaseError.SEVERITY.ERROR,
+        FILE_DELETE_ERROR: BaseError.SEVERITY.ERROR,
+        FILE_SIZE_EXCEEDED: BaseError.SEVERITY.WARNING,
+        READ_PERMISSION_DENIED: BaseError.SEVERITY.CRITICAL,
+        WRITE_PERMISSION_DENIED: BaseError.SEVERITY.CRITICAL,
+        NOT_ENOUGH_DISK_SPACE: BaseError.SEVERITY.CRITICAL,
+        INVALID_JSON_IN_FILE: BaseError.SEVERITY.ERROR,
+    });
+
+    /** @type {Readonly<Record<EngineErrorCode, string>>} */
+    static errorMessageMap = Object.freeze({
+        UNKNOWN_OPERATION: "The requested operation is unknown.",
+        INVALID_NAMESPACE: "The specified namespace is invalid.",
+        INVALID_KEY: "The provided key is invalid.",
+        INVALID_DATA_FORMAT: "The data format is invalid.",
+        ID_OVERRIDE_ATTEMPT: "Attempt to override a protected ID field.",
+        RECORD_NOT_FOUND: "The requested record was not found.",
+        REPO_CREATION_FAILED: "Failed to create the repository.",
+        REPO_ACCESS_FAILED: "Failed to access the repository.",
+        FILE_NOT_FOUND: "The specified file was not found.",
+        FILE_READ_ERROR: "An error occurred while reading the file.",
+        FILE_WRITE_ERROR: "An error occurred while writing to the file.",
+        FILE_DELETE_ERROR: "An error occurred while deleting the file.",
+        FILE_SIZE_EXCEEDED: "The file size exceeds the allowed limit.",
+        READ_PERMISSION_DENIED: "Read permission denied for the requested resource.",
+        WRITE_PERMISSION_DENIED: "Write permission denied for the requested resource.",
+        NOT_ENOUGH_DISK_SPACE: "Not enough disk space to complete the operation.",
+        INVALID_JSON_IN_FILE: "The file contains invalid JSON format.",
+    });
 
   /**
-   * @param {string} message
-   * @param {string} code
+   * @param {EngineErrorCode} code
    * @param {string} source
+   * @param {Error|null} cause
    * @param {Object} [meta={}]
    */
-  constructor(message, code, source, meta = {}) {
+  constructor(code, source, cause, meta = {}) {
     super({
-      message,
       code: code,
-      layer: "engine",
       source: source,
-      severity: BaseError.SEVERITY.WARNING,
-      meta,
+      cause: cause,
+      meta: meta,
+      message: EngineError.errorMessageMap[code],
+      layer: "engine",
+      severity: EngineError.severityMap[code],
     });
   }
 }

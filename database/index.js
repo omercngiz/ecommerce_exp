@@ -25,7 +25,8 @@
  * Module B(higher level) --(catch Error)-->                     "error-policy"
  * "error-policy"         --(error, formatted for server)-->     "error-logger"
  * "error-policy"         --(error, formatted for client)-->     "protocol-adapter"
- * "protocol-adapter"     --(error, formatted for protocol)-->   "protocol-bridge"
+ * "protocol-adapter"     --(error, formatted for protocol)-->   "error-policy"
+ * "error-policy"         --(error, formatted for protocol)-->   "protocol-bridge"
  * "protocol-bridge"      --(Buffer response)-->                 "tcp-connection"
  * "tcp-connection"       --(Buffer response)-->                 Client
  * 

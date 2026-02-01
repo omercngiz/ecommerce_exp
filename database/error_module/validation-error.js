@@ -9,7 +9,7 @@ import BaseError from "./base-error.js";
  * @property {string} source - The code block or function where the error originated.
  * @property {Object} [meta={}] - Additional metadata related to the error.
  */
-export class ValidationError extends BaseError {
+export default class ValidationError extends BaseError {
     static codes = Object.freeze({
     INVALID_INPUT: "VALIDATION_INVALID_INPUT",
     INVALID_TYPE: "VALIDATION_INVALID_TYPE",

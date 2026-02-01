@@ -9,7 +9,7 @@ import BaseError from "./base-error.js";
  * @property {string} source - The code block or function where the error originated.
  * @property {Object} [meta={}] - Additional metadata related to the error.
  */
-export class EngineError extends BaseError {
+export default class EngineError extends BaseError {
     static codes = Object.freeze({
         UNKNOWN_OPERATION: 'ENGINE_UNKNOWN_OPERATION',
         INVALID_NAMESPACE: 'ENGINE_INVALID_NAMESPACE',

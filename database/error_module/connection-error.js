@@ -8,7 +8,7 @@ import BaseError from "./base-error.js";
  * @property {string} source - The code block or function where the error originated.
  * @property {Object} [meta={}] - Additional metadata related to the error.
  */
-export class ConnectionError extends BaseError {
+export default class ConnectionError extends BaseError {
   static codes = Object.freeze({
     SOCKET_TIMEOUT: "CONNECTION_SOCKET_TIMEOUT",
     CONNECTION_REFUSED: "CONNECTION_REFUSED",

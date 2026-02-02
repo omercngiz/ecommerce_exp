@@ -10,17 +10,10 @@
 
 export function resolveErrorPolicy(error) {
   return {
-    log: {
-      enabled: true,
-      level: error.severity,
+    server: {
     },
 
     client: {
-      expose: error.layer === "validation" || error.layer === "protocol",
-      message: mapClientMessage(error),
-      code: mapClientCode(error),
     },
-
-    retryable: isRetryable(error),
   };
 }

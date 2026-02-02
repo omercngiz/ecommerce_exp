@@ -45,10 +45,12 @@ import server from './connection/init-custom-server.js';
 
 console.log(`json-database daemon starting...`);
 
+const app = server();
+
 /**
  * Server Port
  * @type {number}
  * @default 51234
  */
 let PORT = EnvConfig.get_port();
-initServer(server, PORT);
+initServer(app, PORT);

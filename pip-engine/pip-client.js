@@ -1,13 +1,13 @@
 'use strict';
 
 const net = require('net');
-const { encode, REQUEST } = require('./pip-incoming.js');
-const { decode } = require('./pip-outgoing.js');
+const { encode, REQUEST } = require('./pip-outgoing.js');
+const { decode } = require('./pip-incoming.js');
 
 const socket = net.createConnection({ port: 4000 });
 
 socket.on('connect', () => {
-  const req = encode(REQUEST, 'hello server');
+  const req = encode(REQUEST, "hello server");
   socket.write(req);
 });
 

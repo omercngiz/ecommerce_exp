@@ -10,14 +10,22 @@ const { REQUEST, RESPONSE } = require('./frame.js');
  * @returns {Buffer}
  */
 function encode(type, payload) {
-  const data = Buffer.from(payload, 'utf8');
-  const buffer = Buffer.alloc(4 + 1 + data.length);
+    if (type !== REQUEST && type !== RESPONSE) {
+        throw new Error("INVALID_FRAME_TYPE");
+    }
 
-  buffer.writeUInt32BE(data.length, 0);
-  buffer.writeUInt8(type, 4);
-  data.copy(buffer, 5);
+    if (typeof payload !== 'string') {
+        throw new Error("PAYLOAD_MUST_BE_STRING");
+    }
 
-  return buffer;
+    const data = Buffer.from(payload, 'utf8');
+    const buffer = Buffer.alloc(5 + data.length);
+
+    buffer.writeUInt32BE(data.length, 0);
+    buffer.writeUInt8(type, 4);
+    data.copy(buffer, 5);
+
+    return buffer;
 }
 
 module.exports = { encode, REQUEST, RESPONSE };

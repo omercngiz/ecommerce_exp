@@ -31,6 +31,18 @@ const server = net.createServer((socket) => {
             }
         }
     });
+
+    socket.on('error', (err) => {
+        console.error('[socket error] ', err);
+    });
+
+    socket.on('close', () => {
+        console.log('[socket] connection closed');
+    });
+
+    socket.on('end', () => {
+        console.log('[socket] connection ended by client');
+    });
 });
 
 server.listen(4000, () => {

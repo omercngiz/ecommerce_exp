@@ -4,13 +4,13 @@ const net = require('net');
 const { OutgoingMessage, REQUEST } = require('./pip-outgoing.js');
 const IncomingMessage = require('./pip-incoming.js');
 
-const { fragmentedDataTransfer } = require('../test/data-transfer-tests.js');
+const { fragmentedData, incompeleteHeader, frameFlooding } = require('../test/data-transfer-tests.js');
 
 const parser = new IncomingMessage();
 const socket = net.createConnection({ port: 4000 });
 
 socket.on('connect', () => {
-  fragmentedDataTransfer(socket);
+  incompeleteHeader(socket);
 });
 
 socket.on('data', (chunk) => {

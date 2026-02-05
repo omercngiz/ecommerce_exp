@@ -1,17 +1,20 @@
+const { OutgoingMessage, REQUEST } = require('../lib/pip-outgoing.js');
+
 /**
- * Simulates piecemeal data transfer by sending buffer in small chunks
- * @param {import('net').Socket} socket - Socket to emit data to
- * @param {Buffer} buffer - Buffer to split and send
- * @param {number} [chunkSize=3] - Size of each chunk in bytes
- * @param {number} [delay=1000] - Delay between chunks in milliseconds
- * @param {Function} [callback] - Called when all chunks are sent
+ * Simulates piecemeal data transfer by sending buffer in small chunks.
+ * @param {import('net').Socket} socket
+ * @param {number} [chunkSize=3] - Size of each chunk in bytes.
+ * @param {number} [delay=1000] - Delay between chunks in milliseconds.
+ * @param {Function} [callback] - Called when all chunks are sent.
  */
-function piecemealDataTransfer(socket, buffer, chunkSize = 3, delay = 1000, callback) {
+function fragmentedDataTransfer(socket, chunkSize = 3, delay = 1000, callback) {
+    const req = OutgoingMessage(REQUEST, "Hello, Server! This is a fragmented message test.");
+
     /** @type {Array<Buffer>} */
     const chunks = [];
     
-    for (let i = 0; i < buffer.length; i += chunkSize) {
-        chunks.push(buffer.subarray(i, i + chunkSize));
+    for (let i = 0; i < req.length; i += chunkSize) {
+        chunks.push(req.subarray(i, i + chunkSize));
     }
 
     let index = 0;
@@ -43,4 +46,17 @@ function piecemealDataTransfer(socket, buffer, chunkSize = 3, delay = 1000, call
     };
 }
 
-module.exports = { piecemealDataTransfer };
+/**
+ * Simulates sending an incomplete header to test server's error handling.
+ * @param {import('net').Socket} socket 
+ * @param {Function} [callback] - Called after sending the incomplete header.
+ */
+function incompeleteHeaderDataTransfer(socket, callback) {
+    const req = OutgoingMessage(REQUEST, "This is an incomplete message test.");
+    const incompleteHeader = req.subarray(0, 3); 
+    console.log('[test] sending incomplete header');
+    socket.write(incompleteHeader);
+    if (callback) callback();
+}
+
+module.exports = { fragmentedDataTransfer, incompeleteHeaderDataTransfer };

@@ -7,7 +7,7 @@ const { OutgoingMessage, REQUEST } = require('../lib/pip-outgoing.js');
  * @param {number} [delay=1000] - Delay between chunks in milliseconds.
  * @param {Function} [callback] - Called when all chunks are sent.
  */
-function fragmentedDataTransfer(socket, chunkSize = 3, delay = 1000, callback) {
+function fragmentedData(socket, chunkSize = 3, delay = 1000, callback) {
     const req = OutgoingMessage(REQUEST, "Hello, Server! This is a fragmented message test.");
 
     /** @type {Array<Buffer>} */
@@ -51,7 +51,7 @@ function fragmentedDataTransfer(socket, chunkSize = 3, delay = 1000, callback) {
  * @param {import('net').Socket} socket 
  * @param {Function} [callback] - Called after sending the incomplete header.
  */
-function incompeleteHeaderDataTransfer(socket, callback) {
+function incompeleteHeader(socket, callback) {
     const req = OutgoingMessage(REQUEST, "This is an incomplete message test.");
     const incompleteHeader = req.subarray(0, 3); 
     console.log('[test] sending incomplete header');
@@ -59,4 +59,15 @@ function incompeleteHeaderDataTransfer(socket, callback) {
     if (callback) callback();
 }
 
-module.exports = { fragmentedDataTransfer, incompeleteHeaderDataTransfer };
+/**
+ * Simulates flooding the server with multiple frames in quick succession.
+ * @param {import('net').Socket} socket 
+ * @param {number} count 
+ */
+function frameFlooding(socket, count = 100) {
+    for (let i = 0; i < count; i++) {
+        socket.write(OutgoingMessage(REQUEST, `${i + 1}`));
+    }
+}
+
+module.exports = { fragmentedData, incompeleteHeader, frameFlooding };

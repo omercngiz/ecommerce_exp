@@ -4,9 +4,9 @@ const net = require('net');
 const IncomingMessage = require('./pip-incoming.js');
 const { OutgoingMessage, RESPONSE } = require('./pip-outgoing.js');
 
-const parser = new IncomingMessage();
-
 const server = net.createServer((socket) => {
+    // Her socket için ayrı parser instance'ı oluştur
+    const parser = new IncomingMessage();
 
     /**
      * Handles incoming data on the socket.
@@ -23,9 +23,13 @@ const server = net.createServer((socket) => {
                 socket.write(responseFrame);
             });
         } catch (error) {
-            console.error('[protocol error] ', error.message);
-            socket.write(OutgoingMessage(RESPONSE, `ERROR: ${error.message}`));
-            socket.destroy();
+            if(error instanceof Error) {
+                console.error('[protocol error] ', error.message);
+                socket.write(OutgoingMessage(RESPONSE, `ERROR: ${error.message}`));
+                socket.destroy();
+            } else {
+                throw error;
+            }
         }
     });
 });

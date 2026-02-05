@@ -2,8 +2,9 @@
 
 const net = require('net');
 const { encode, REQUEST } = require('./pip-outgoing.js');
-const parser = require('./pip-incoming.js');
+const IncomingMessage = require('./pip-incoming.js');
 
+const parser = new IncomingMessage();
 const socket = net.createConnection({ port: 4000 });
 
 socket.on('connect', () => {
@@ -12,7 +13,9 @@ socket.on('connect', () => {
 });
 
 socket.on('data', (chunk) => {
-  const res = parser.push(chunk);
-  console.log('[client] response:', res.payload);
+  const messages = parser.push(chunk);
+  messages.forEach(msg => {
+    console.log('[client] response:', msg.payload);
+  });
   socket.end();
 });

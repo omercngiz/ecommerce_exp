@@ -2,7 +2,7 @@
 
 Definitely a geek project: no shortcuts, just building from the roots to truly learn.
 
-## 🚀 What’s Included (No Frameworks Were Harmed in the Making)
+## What’s Included (No Frameworks Were Harmed in the Making)
 
 - **JSON Database:** It’s JSON, folks — the people’s database.
 - **PIP - Primitive Impart Protocol:** So primitive it barely deserves to be called a protocol 😁 — yet somehow, it works. 🤔

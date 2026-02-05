@@ -18,7 +18,7 @@ const server = net.createServer((socket) => {
             const messages = parser.push(chunk);
             messages.forEach(msg => {
                 console.log('[server] request:', msg.payload);
-                const responsePayload = `Received: ${msg.payload}`;
+                const responsePayload = `[server] I received your message.\n [server] Response to: "${msg.payload}"`;
                 const responseFrame = OutgoingMessage(RESPONSE, responsePayload);
                 socket.write(responseFrame);
             });

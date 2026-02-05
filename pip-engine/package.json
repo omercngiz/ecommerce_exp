@@ -1,0 +1,24 @@
+{
+  "name": "ecommerce_exp_pip_engine",
+  "version": "1.0.0",
+  "description": "Primitive Impart Protocol for experimental ecommerce app",
+  "main": "lib/pip.js",
+  "scripts": {
+    "start": "node lib/pip.js",
+    "dev": "node --watch lib/pip.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omercngiz/ecommerce_exp.git"
+  },
+  "author": "Ömer Cengiz <omer.cengiz-34@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/omercngiz/ecommerce_exp/issues"
+  },
+  "homepage": "https://github.com/omercngiz/ecommerce_exp#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}

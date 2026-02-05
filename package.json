@@ -5,13 +5,16 @@
   "main": "index.js",
   "workspaces": [
     "backend",
-    "database",
-    "frontend"
+    "json-database",
+    "frontend",
+    "pip-engine",
+    "train",
+    "fake-bank-api"
   ],
   "scripts": {
     "install:all": "npm install --workspaces",
     "start:backend": "npm run start --workspace=backend",
-    "start:database": "npm run start --workspace=database",
+    "start:database": "npm run start --workspace=json-database",
     "start:frontend": "npm run start --workspace=frontend",
     "start:all": "npm-run-all --parallel start:*",
     "test:all": "npm test --workspaces",

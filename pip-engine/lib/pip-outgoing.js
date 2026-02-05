@@ -9,7 +9,7 @@ const { REQUEST, RESPONSE } = require('./frame.js');
  * @param {string} payload 
  * @returns {Buffer}
  */
-function encode(type, payload) {
+function OutgoingMessage(type, payload) {
     if (type !== REQUEST && type !== RESPONSE) {
         throw new Error("INVALID_FRAME_TYPE");
     }
@@ -28,4 +28,4 @@ function encode(type, payload) {
     return buffer;
 }
 
-module.exports = { encode, REQUEST, RESPONSE };
+module.exports = { OutgoingMessage, REQUEST, RESPONSE };

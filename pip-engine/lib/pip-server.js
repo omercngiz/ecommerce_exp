@@ -5,7 +5,6 @@ const IncomingMessage = require('./pip-incoming.js');
 const { OutgoingMessage, RESPONSE } = require('./pip-outgoing.js');
 
 const server = net.createServer((socket) => {
-    // Her socket için ayrı parser instance'ı oluştur
     const parser = new IncomingMessage();
 
     /**

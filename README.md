@@ -1,26 +1,11 @@
-# Experimental E-Commerce App
+# Hello there..
 
-An experimental project developed as part of my JavaScript experiments and learning journey.
+Definitely a geek project: no shortcuts, just building from the roots to truly learn.
 
-## 🎯 Purpose
+## 🚀 What’s Included (No Frameworks Were Harmed in the Making)
 
-This project is designed more for **exploring the limits** of what I can do with JavaScript and **experimenting with new concepts**, rather than being a real product.
-
-## 🚀 Goals
-
-- **JSON Database from Scratch:** Building my own JSON-based database using Node.js `fs` module
-- **Framework-Free Development:** Developing backend and frontend without using any frameworks or libraries
-- **Pure JavaScript:** Discovering what can be achieved with raw JavaScript
-
-## 📦 Monorepo Structure
-
-- **backend/** - API and business logic with native Node.js HTTP server
-- **database/** - Custom JSON database server built with Node.js
-- **frontend/** - View layer with Pug template engine
-
-## 🛠️ Kurulum
-
-```bash
-npm install
-npm run start:all
-```
+- **JSON Database:** It’s JSON, folks — the people’s database.
+- **PIP - Primitive Impart Protocol:** So primitive it barely deserves to be called a protocol 😁 — yet somehow, it works. 🤔
+- **train:** An express-like framework, if Express had to survive with half of the features. 😂
+- **Fake Bank API:** Spend unlimited money, exploit the system, steal millions...
+- **Pure NodeJS:** Pure NodeJS: less dependencies and more pain. 😈

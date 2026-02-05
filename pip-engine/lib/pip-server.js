@@ -1,8 +1,10 @@
 'use strict';
 
 const net = require('net');
-const { decode } = require('./pip-incoming.js');
-const { encode, RESPONSE } = require('./pip-outgoing.js');
+const IncomingMessage = require('./pip-incoming.js');
+const { OutgoingMessage, RESPONSE } = require('./pip-outgoing.js');
+
+const parser = new IncomingMessage();
 
 const server = net.createServer((socket) => {
 
@@ -13,15 +15,16 @@ const server = net.createServer((socket) => {
      */
     socket.on('data', (chunk) => {
         try {
-            const request = decode(chunk);
-
-            console.log('[server] received:', request.payload);
-
-            const response = encode(RESPONSE, `ACK: ${request.payload}\nHello client`);
-            socket.write(response);
+            const messages = parser.push(chunk);
+            messages.forEach(msg => {
+                console.log('[server] request:', msg.payload);
+                const responsePayload = `Received: ${msg.payload}`;
+                const responseFrame = OutgoingMessage(RESPONSE, responsePayload);
+                socket.write(responseFrame);
+            });
         } catch (error) {
             console.error('[protocol error] ', error.message);
-            socket.write(`ERROR: ${error.message}`);
+            socket.write(OutgoingMessage(RESPONSE, `ERROR: ${error.message}`));
             socket.destroy();
         }
     });

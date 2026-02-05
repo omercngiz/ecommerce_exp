@@ -30,6 +30,7 @@ IncomingMessage.prototype.push = function (chunk) {
 
     while (true) {
         if (this.state === 'WAIT_HEADER') {
+            console.log('[parser] waiting for header');
             if (this.buffer.length < 5) break;
 
             const length = this.buffer.readUInt32BE(0);
@@ -55,6 +56,7 @@ IncomingMessage.prototype.push = function (chunk) {
         }
 
         if (this.state === 'WAIT_PAYLOAD') {
+            console.log('[parser] waiting for payload');
             if (this.buffer.length < this.expectedLength) break;
 
             const payloadBuf = this.buffer.subarray(0, this.expectedLength);

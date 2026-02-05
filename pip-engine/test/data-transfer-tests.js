@@ -1,6 +1,6 @@
 /**
  * Simulates piecemeal data transfer by sending buffer in small chunks
- * @param {import('events').EventEmitter} socket - Socket to emit data to
+ * @param {import('net').Socket} socket - Socket to emit data to
  * @param {Buffer} buffer - Buffer to split and send
  * @param {number} [chunkSize=3] - Size of each chunk in bytes
  * @param {number} [delay=1000] - Delay between chunks in milliseconds
@@ -17,14 +17,14 @@ function piecemealDataTransfer(socket, buffer, chunkSize = 3, delay = 1000, call
     let index = 0;
 
     const interval = setInterval(() => {
-        // All chunks sent
         if (index >= chunks.length) {
             clearInterval(interval);
             if (callback) callback();
             return;
         }
 
-        socket.emit('data', chunks[index]);
+        console.log(`[test] sending chunk ${index + 1}/${chunks.length}`);
+        socket.write(chunks[index]);
         index++;
     }, delay);
 
@@ -42,3 +42,5 @@ function piecemealDataTransfer(socket, buffer, chunkSize = 3, delay = 1000, call
         socket.removeListener('error', cleanup);
     };
 }
+
+module.exports = { piecemealDataTransfer };

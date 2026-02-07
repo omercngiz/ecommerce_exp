@@ -64,9 +64,9 @@ function incompeleteHeader(socket, callback) {
  * @param {import('net').Socket} socket 
  * @param {number} count 
  */
-function frameFlooding(socket, count = 100) {
+function frameFlooding(socket, count = 50) {
     for (let i = 0; i < count; i++) {
-        socket.write(OutgoingMessage(REQUEST, `${i + 1}`));
+        socket.write(OutgoingMessage(REQUEST, `Frame flooding test message ${i + 1}`));
     }
 }
 

@@ -1,22 +1,20 @@
 'use strict';
 
 const net = require('net');
-const { OutgoingMessage, REQUEST } = require('./pip-outgoing.js');
-const IncomingMessage = require('./pip-incoming.js');
+const { OutgoingMessage, REQUEST, RESPONSE } = require('./pip-outgoing');
+const Agent = require('./pip-agent');
+const { Buffer} = require('buffer');
+const {
+  ConnResetException,
+  ERR_INVALID_ARG_TYPE,
+  ERR_INVALIN_PIP_TOKEN,
+} = require('../internals/errors');
+const {
+  validateInteger,
+  validateString,
+  validateBoolean,
+} = require('../internals/validators');
 
-const { fragmentedData, incompeleteHeader, frameFlooding } = require('../test/data-transfer-tests.js');
-
-const parser = new IncomingMessage();
-const socket = net.createConnection({ port: 4000 });
-
-socket.on('connect', () => {
-  incompeleteHeader(socket);
-});
-
-socket.on('data', (chunk) => {
-  const messages = parser.push(chunk);
-  messages.forEach(msg => {
-    console.log('[client] Server response received\n', msg.payload);
-  });
-  socket.end();
-});
+function ClientRequest() {
+  OutgoingMessage.call(this);
+}

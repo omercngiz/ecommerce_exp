@@ -75,4 +75,6 @@ IncomingMessage.prototype.push = function (chunk) {
     return messages;
 };
 
-module.exports = IncomingMessage;
+module.exports = {
+    IncomingMessage,
+};

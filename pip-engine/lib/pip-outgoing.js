@@ -28,4 +28,8 @@ function OutgoingMessage(type, payload) {
     return buffer;
 }
 
-module.exports = { OutgoingMessage, REQUEST, RESPONSE };
+module.exports = { 
+    OutgoingMessage,
+    REQUEST,
+    RESPONSE,
+};

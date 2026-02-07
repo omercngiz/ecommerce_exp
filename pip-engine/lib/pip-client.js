@@ -1,13 +1,11 @@
 'use strict';
 
 const net = require('net');
-const { OutgoingMessage, REQUEST, RESPONSE } = require('./pip-outgoing');
+const { OutgoingMessage } = require('./pip-outgoing');
 const Agent = require('./pip-agent');
 const { Buffer} = require('buffer');
 const {
-  ConnResetException,
-  ERR_INVALID_ARG_TYPE,
-  ERR_INVALIN_PIP_TOKEN,
+  NotImplementedError,
 } = require('../internals/errors');
 const {
   validateInteger,
@@ -15,6 +13,17 @@ const {
   validateBoolean,
 } = require('../internals/validators');
 
+/**
+ * ClientRequest represents a request sent by the client to the server.
+ * @constructor
+ */
 function ClientRequest() {
   OutgoingMessage.call(this);
 }
+
+Object.setPrototypeOf(ClientRequest.prototype, OutgoingMessage.prototype);
+Object.setPrototypeOf(ClientRequest, OutgoingMessage);
+
+module.exports = {
+    ClientRequest,
+};

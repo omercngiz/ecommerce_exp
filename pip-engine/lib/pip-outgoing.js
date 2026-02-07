@@ -2,7 +2,11 @@
 
 const { REQUEST, RESPONSE } = require('./frame.js');
 
-function OutgoingMessage() {
+/**
+ * OutgoingMessage is the base class for ClientRequest and ServerResponse.
+ * @param {Object} options
+ */
+function OutgoingMessage(options) {
 
 }
 

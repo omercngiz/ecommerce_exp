@@ -1,25 +1,8 @@
 {
-  "name": "experimental_ecommerce_app",
+  "name": "primitive_impart_protocol",
   "version": "1.0.0",
-  "description": "Experimental ecommerce application",
-  "main": "index.js",
-  "workspaces": [
-    "backend",
-    "json-database",
-    "frontend",
-    "pip-engine",
-    "train",
-    "fake-bank-api"
-  ],
-  "scripts": {
-    "install:all": "npm install --workspaces",
-    "start:backend": "npm run start --workspace=backend",
-    "start:database": "npm run start --workspace=json-database",
-    "start:frontend": "npm run start --workspace=frontend",
-    "start:all": "npm-run-all --parallel start:*",
-    "test:all": "npm test --workspaces",
-    "clean": "npm run clean --workspaces"
-  },
+  "description": "Personal project for understanding data sharing protocols. Especially HTTP/S",
+  "main": "src/lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/omercngiz/ecommerce_exp.git"
